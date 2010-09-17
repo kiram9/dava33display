@@ -13,7 +13,8 @@ AM_CFLAGS =\
 bin_PROGRAMS = asusdisplay
 
 asusdisplay_SOURCES = \
-	main.c
+	main.c       \
+	displayconstants.h
 
 asusdisplay_LDFLAGS = 
 

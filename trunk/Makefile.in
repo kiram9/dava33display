@@ -186,7 +186,8 @@ AM_CFLAGS = \
 	 -lusb
 
 asusdisplay_SOURCES = \
-	main.c
+	main.c       \
+	displayconstants.h
 
 asusdisplay_LDFLAGS = 
 asusdisplay_LDADD = 
