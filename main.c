@@ -22,6 +22,7 @@
 #include <usb.h>
 #include <stdint.h>
 #include <time.h>
+#include <sys/resource.h> //to set process priority 
 #include <HAL_display.h>
 #include <gd.h>
 
@@ -65,7 +66,12 @@ int main(int argc, char **argv)
 		return (0);
 	}
 
-	///GET some time from the system to display 
+	//Set our process priority to very low so we dont hog resources
+	//see http://www.mkssoftware.com/docs/man3/setpriority.3.asp
+	setpriority (PRIO_PROCESS, 0, 15);
+
+
+	///get some time from the system to display 
 	//SEE http://www.cs.utah.edu/dept/old/texinfo/glibc-manual-0.02/library_19.html#SEC320
 	/* Get the current time.  */
 	curtime = time (NULL);
@@ -102,7 +108,7 @@ int main(int argc, char **argv)
 
 	if(0 <= displayinit())
 	{
-
+		
 		sendimage(buffer);//buffer);
 
 		displayclose();
