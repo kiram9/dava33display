@@ -99,18 +99,18 @@ void readinitialization()
 	else fprintf(stderr, "did not get response data ");
 	
 	//get command ack
-	if (readdata(usb_handle, 0x81,&resp, 0x0D) > -1)
+	if (readdata(0x81,&resp, 0x0D) > -1)
 	{
 		
 	}
 	else fprintf(stderr, "did not get command response ");
 
-	*taghandle = command.dCBWTag;
+	starttag = command.dCBWTag;
 	
 }
 
 /*Sends an image to the display as put in imgbuffer assumes an image buffer of 320*240*3 bytes */
-void sendimage(uint8_t * imgbuffer)
+int sendimage(uint8_t * imgbuffer)
 {
 	int i= 0;
 	uint8_t imgdata[(0x10000*3 + 0x8420)];
@@ -186,6 +186,7 @@ void sendimage(uint8_t * imgbuffer)
 	//sequentially, (although i dont think the display cares too much it might mess 
 	//with its state machine if it doesnt get sequential tags. 
 	starttag = command.dCBWTag;
+	return (0);
 }
 
 /* poll  
@@ -197,7 +198,7 @@ void sendimage(uint8_t * imgbuffer)
 * just generates crap on the bus and I dont use it for now, for experemental purposes 
 * only 
 */
-void poll()
+int poll()
 {
 	char devicename[0xFF]; 
 	struct commandblockwrapper command; 
@@ -213,16 +214,17 @@ void poll()
 	memcpy(command.CBWCB,pollcommand,sizeof(pollcommand));
 	//poll
 	writedata( 0x02, &command, sizeof(command));
-	while (0 < usb_bulk_read(0x81, devicename,0x26,100));
+	while (0 < usb_bulk_read(usb_handle ,0x81, devicename,0x26,100));
 	/*Whenever the device was polled with this command in windows it would cause a 
 	bus halt so we would have to clear the halt, this would happen at random times 
 	somewhere in the middle of reading back the data the device is trying to send, 
 	I guess whoever wrote the firmware did something strange here, so I just assume
 	there is a halt after the first read, clear it, and then read again*/
-	usb_clear_halt(0x81);
+	usb_clear_halt(usb_handle,0x81);
 	readdata(0x81, &resp, 0x0d);
 
 	starttag = command.dCBWTag;
+	return (0);
 }	
 /*Init the device, this was pulled from the libusb project examples, it reads the 
 devices on the bus and returns a handle to my device. 
@@ -286,15 +288,16 @@ int displayinit(){
 	}
 	
 	//Prints some status info about the device 
-	printf("Device Name: ");
+	/*
 	usb_get_string_simple(usb_handle, 16, devicename, sizeof(devicename));
-	printf( devicename);
-	printf("\nProduct: ");
+	printf("Device Name:%s \n",devicename);
+	
 	usb_get_string_simple(usb_handle, 32, devicename, sizeof(devicename));
-	printf("%s\n",devicename);
+	printf("\nProduct:%s \n",devicename);
 
 	usb_get_string_simple(usb_handle, 96, devicename, sizeof(devicename));
 	printf("Serial: %s \n", devicename);
+	*/
 	//sleep(1);
 	//usb_reset(usb_handle);
 	//set device to active configuration 1 (only configuration ) 
@@ -313,7 +316,7 @@ int displayinit(){
 	usb_clear_halt(usb_handle,0x81);
 	usb_clear_halt(usb_handle,0x02);
 
-	readinitialization(usb_handle,&starttag);
+	//readinitialization(usb_handle,&starttag);
 	usb_resetep(usb_handle,0x81);
 	usb_resetep(usb_handle,0x02);	
 	//poll(usb_handle,&starttag);

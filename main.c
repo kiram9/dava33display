@@ -26,9 +26,6 @@
 
 int main(int argc, char **argv)
 {
-
-		int retval = 1;
-		int i;
 		FILE *f;
 		unsigned char buffer[320*240*3];
 		int n;
@@ -42,7 +39,7 @@ int main(int argc, char **argv)
 		f = fopen(argv[1], "rb");
 		if (f)
 		{   
-			fseek(f, 0x35, 0); //we assume the file is an uncompressed bmp, should tidy this up better
+			fseek(f, 0x35, 0); //we assume the file is an uncompressed bmp RGB, should tidy this up better
 			//read in the file to a memory buffer 
 			n = fread(buffer, 320*240*3, 1, f);
 		}
@@ -52,17 +49,15 @@ int main(int argc, char **argv)
 				    "Cannot open the image file \n");
 			return (0);
 		}
-		//a small test to see what the screen shows us 
-		//for (i = 0; i < sizeof(buffer);){
-		//	buffer[i++] =  0x00; //green
-		//	buffer[i++] =  0x00; //blue
-		//	buffer[i++] =  0x00; //red
-		//}
 
+	
+		if(0 <= displayinit())
+		{
 		
-		displayinit(); 
+			sendimage(buffer);//buffer);
 		
-		sendimage(usb_handle,&starttag,buffer);//buffer);
+			displayclose();
+		}
 
 		return (0);
 }
