@@ -49,7 +49,7 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_asusdisplay_OBJECTS = main.$(OBJEXT)
+am_asusdisplay_OBJECTS = main.$(OBJEXT) HAL_display.$(OBJEXT)
 asusdisplay_OBJECTS = $(am_asusdisplay_OBJECTS)
 asusdisplay_DEPENDENCIES =
 asusdisplay_LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
@@ -187,7 +187,9 @@ AM_CFLAGS = \
 
 asusdisplay_SOURCES = \
 	main.c       \
-	displayconstants.h
+	displayconstants.h       \
+	HAL_display.c       \
+	HAL_display
 
 asusdisplay_LDFLAGS = 
 asusdisplay_LDADD = 
@@ -294,6 +296,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/HAL_display.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 
 .c.o:

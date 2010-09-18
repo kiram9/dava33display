@@ -14,7 +14,9 @@ bin_PROGRAMS = asusdisplay
 
 asusdisplay_SOURCES = \
 	main.c       \
-	displayconstants.h
+	displayconstants.h       \
+	HAL_display.c       \
+	HAL_display
 
 asusdisplay_LDFLAGS = 
 
