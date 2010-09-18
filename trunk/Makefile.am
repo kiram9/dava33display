@@ -8,7 +8,8 @@ AM_CPPFLAGS = \
 AM_CFLAGS =\
 	 -Wall\
 	 -g\
-	 -lusb
+	 -lusb\
+	 -lgd
 
 bin_PROGRAMS = asusdisplay
 
@@ -16,7 +17,8 @@ asusdisplay_SOURCES = \
 	main.c       \
 	displayconstants.h       \
 	HAL_display.c       \
-	HAL_display
+	HAL_display       \
+	HAL_display.h
 
 asusdisplay_LDFLAGS = 
 
