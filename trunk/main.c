@@ -22,6 +22,9 @@
 #include <usb.h>
 #include <stdint.h>
 #include <time.h>
+#include <signal.h>
+#include <signal.h>
+
 #include <sys/resource.h> //to set process priority 
 #include <HAL_display.h>
 #include <gd.h>
@@ -65,10 +68,22 @@ int genereatetime(gdImagePtr in)
 	strftime (txt, TXTSIZE, "%I:%M", loctime);
 
 	white = gdImageColorAllocate(in, 255, 255, 255);  
-	err = gdImageStringFT(in,&brect[0],white,font,50,0.0,20,70,txt);
+	err = gdImageStringFT(in,&brect[0],white,font,40,0.0,20,60,txt);
+	gdImageSetThickness(in, 2);
+	gdImageLine(in, 20, 62, 300, 62, white);
+	strftime (txt, TXTSIZE, "%A, %B %d", loctime);
+	err = gdImageStringFT(in,&brect[0],white,font,10,0.0,20,74,txt);
+
+	return (0);
 }
-
-
+int daemonize;
+void 
+synch_signal (int sig)
+{
+	daemonize = 0;
+	displayclose();
+	
+}
 int main(int argc, char **argv)
 {
 	FILE *f;
@@ -76,9 +91,22 @@ int main(int argc, char **argv)
 	int n,i,x,y, pixel;
 	int black;
 	int white;
-	int daemonize = 0;
 	gdImagePtr im, imback;
 
+	struct sigaction usr_action;
+	sigset_t block_mask;
+
+	daemonize = 0;
+	/* Establish the signal handler.  */
+	sigfillset (&block_mask);
+	usr_action.sa_handler = synch_signal;
+	usr_action.sa_mask = block_mask;
+	usr_action.sa_flags = 0;
+	sigaction (SIGINT, &usr_action, NULL);
+
+
+
+	
 	if (argc < 2) {
 		fprintf(stderr,
 				"Specify one image file \n");
@@ -106,7 +134,7 @@ int main(int argc, char **argv)
 
 	//Set our process priority to very low so we dont hog resources
 	//see http://www.mkssoftware.com/docs/man3/setpriority.3.asp
-	setpriority (PRIO_PROCESS, 0, 15);
+	setpriority (PRIO_PROCESS, 0, 18);
 
 	//Generate some images
 	im = gdImageCreateTrueColor(XSIZE, YSIZE);
@@ -132,7 +160,7 @@ int main(int argc, char **argv)
 			sendimage(buffer);//buffer);
 			if (0 == daemonize)
 				break; 
-			sleep(10);
+			usleep(500);
 		}
 		displayclose();
 	}
