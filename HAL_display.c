@@ -129,7 +129,7 @@ int sendimage(uint8_t * imgbuffer)
 	//We copy the image data passed in on imgbuffer into our own buffer and then 
 	//flip it horiz and vertically and swap the RGB to RBG since this is the format 
 	//of the display (terrible format) 
-	for (i = 32; i < sizeof(imgdata);){
+	/*for (i = 32; i < sizeof(imgdata);){
 		imgdata[i] = imgbuffer[320*240*3 - (((i-32)/960)*960 + 960 -(i - 32)%960)]; 
 		i++;
 		imgdata[i] = imgbuffer[320*240*3 - (((i + 1-32)/960)*960 + 960 -(i+ 1 - 32)%960)]; //swap G and B
@@ -137,8 +137,8 @@ int sendimage(uint8_t * imgbuffer)
 		imgdata[i] = imgbuffer[320*240*3 - (((i-1-32)/960)*960 + 960 -(i-1 - 32)%960)];  //swap G and B
 		i++;
 
-	}
-
+	}*/
+	memcpy(imgdata + sizeof(ImgHeader),imgbuffer,320*240*3);
 	
 	//send first bunch of image data 
 	command.dCBWTag++;
