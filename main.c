@@ -32,7 +32,8 @@
 #define XSIZE 320
 #define YSIZE 240
 #define TXTSIZE 128
-
+/* this is kind of inefficient but we have to shove 32bit ints into 24bit pixels 
+dropping the transparency byte*/
 int copygdtobuf(unsigned char *buf, gdImagePtr in)
 {
 	int x, y, pixel; 
@@ -55,7 +56,8 @@ int genereatetime(gdImagePtr in)
 	char txt[TXTSIZE];
 	int brect[8];
 	char *err;
-	char *font = "Orbitron/TTF/orbitron-medium.ttf"; /* User supplied font */
+	//char *font = "Orbitron/TTF/orbitron-medium.ttf"; /* User supplied font */
+	char *font = "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf";
 	int white;
 	
 	///get some time from the system to display 
@@ -66,16 +68,63 @@ int genereatetime(gdImagePtr in)
 	/* Convert it to local time representation.  */
 	loctime = localtime (&curtime);
 	strftime (txt, TXTSIZE, "%I:%M", loctime);
-
 	white = gdImageColorAllocate(in, 255, 255, 255);  
-	err = gdImageStringFT(in,&brect[0],white,font,40,0.0,20,60,txt);
+	err = gdImageStringFT(in,&brect[0],white,font,60,0.0,20,80,txt);
+
+	strftime (txt, TXTSIZE, ":%S%p", loctime);
+	err = gdImageStringFT(in,&brect[0],white,font,20,0.0,brect[2],brect[1] - 1,txt);
+
+	
 	gdImageSetThickness(in, 2);
-	gdImageLine(in, 20, 62, 300, 62, white);
+	gdImageLine(in, 20, 84, 300, 84, white);
 	strftime (txt, TXTSIZE, "%A, %B %d", loctime);
-	err = gdImageStringFT(in,&brect[0],white,font,10,0.0,20,74,txt);
+	err = gdImageStringFT(in,&brect[0],white,font,10,0.0,20,95,txt);
 
 	return (0);
 }
+int genereatesysinfo(gdImagePtr in, int x, int y,int size){
+	char txt[20];
+	int brect[8];
+	char *err;
+	FILE *f;
+	//char *font = "Orbitron/TTF/orbitron-medium.ttf"; /* User supplied font */
+	char *font = "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf";
+	char *temppath = "/sys/class/thermal/thermal_zone0/temp";
+
+	int white, grey, temperature, n;
+	
+	f = fopen(temppath, "r");
+	if (f)
+	{   
+
+		//fseek(f, 0x35, 0); //we assume the file is an uncompressed bmp RGB, should tidy this up better
+		//read in the file to a memory buffer 
+		n = fread(txt,10, 1, f);
+		fclose(f);
+	}
+	else
+	{
+		return (-1);
+	}
+	temperature = atoi (txt) / 1000;  
+	white = gdImageColorAllocate(in, 255, 255, 255);  
+	sprintf (txt, "TEMP %i C",temperature);
+	err = gdImageStringFT(in,&brect[0],white,font,size,0.0,x,y,txt);
+	if(50 > temperature)
+		grey = gdImageColorAllocate(in, 0,255,0);
+	else 	if(65 > temperature)
+		grey = gdImageColorAllocate(in, 255,150,0);
+	else grey = gdImageColorAllocate(in, 255,0,0);
+	if (98 < temperature) temperature = 98; 
+	gdImageSetThickness(in, 1);
+	gdImageRectangle(in,brect[4], brect[5], brect[4] + 100,brect[5]+size, white);
+	gdImageFilledRectangle(in,brect[4] + 1, brect[5] + 1, brect[4] + (temperature - 20)*2,brect[5] + size - 1, grey);
+
+	return (0);
+}
+
+
+
 int daemonize;
 void 
 synch_signal (int sig)
@@ -88,7 +137,7 @@ int main(int argc, char **argv)
 {
 	FILE *f;
 	unsigned char buffer[XSIZE*YSIZE*3];
-	int n,i,x,y, pixel;
+	//int n,i,x,y, pixel;
 	int black;
 	int white;
 	gdImagePtr im, imback;
@@ -156,6 +205,7 @@ int main(int argc, char **argv)
 			
 			gdImageCopy(im,imback,0,0,0,0,XSIZE,YSIZE);
 			genereatetime(im);
+			genereatesysinfo(im,20,120,10);
 			copygdtobuf(buffer,im);
 			sendimage(buffer);//buffer);
 			if (0 == daemonize)
