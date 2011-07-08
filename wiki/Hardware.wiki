@@ -1,0 +1,34 @@
+#summary Hardware overview
+
+= Introduction =
+
+The display driver is for the USB TFT that comes as standard on the ASUS DAV A33 HTPC. The display also comes with a not documented Moxi htpc, which comes in the same case as the A33.
+
+= ASUS DAV A33=
+
+  * AMD Athlon 64 3800+
+  * 512Mb ram
+  * TFT display (usb)
+  * 2x Hauppauge card (TV/composite/S-VHS inputs)
+  * IR port (usb)
+  * ATI gfx built in
+
+
+
+= MOXI HOME CINEMA HD DMR model HDDMR9000 =
+
+Seen on ebay, usually described as a "ASUS HTPC with HDMI".
+
+This unit is like a cut down A33, but with NVIDA/nForce chipset instead of ATI.
+
+  * AMD Athlon 64 3800+
+  * 512Mb ram (2x 256Mb DDR2 667)
+  * TFT display (usb)
+  * 2x Hauppauge WinTV-1800 card (TV ONLY inputs) - NOTE some hardware ID software identifies these as WinTV-1250. One card is PCI-E 16x, the other is PCI-E 1x
+  * IR port (usb)
+  * NVIDIA built in HDMI (also S-VHS and composite)
+
+
+The motherboard of the this unit is a M2NPV2-DHS, this appears to be very similar to the [http://www.asus.com/Motherboards/AMD_AM2/M2NPVMX/ M2NPV-MX] motherboard (minus a few pieces of hardware. The manual for the M2NPV-MX is useful for this machine even if the motherboard is not identical.
+
+There are multiple reports of increasing memory and changing the CPU.
