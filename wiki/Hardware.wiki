@@ -17,6 +17,8 @@ The display driver is for the USB TFT that comes as standard on the [http://www.
 
 = MOXI HOME CINEMA HD DMR model HDDMR9000 =
 
+http://dava33display.googlecode.com/svn/wiki/static/pics/hddmr9000_x800.jpg
+
 Seen on ebay, usually described as a "ASUS HTPC with HDMI". It looks like an A33 unless the front drop down panel and rear is examined closely. Most units ship without Operating Systems and remotes/keyboard/mice. See SoftwareAndDrivers for information on OS and drivers.
 
 This unit is essentially a cut down A33; missing some ports (and WiFi) and with NVIDA/nForce chipset instead of ATI. Because of the differences to an A33, only some of the A33 drivers can be used.
