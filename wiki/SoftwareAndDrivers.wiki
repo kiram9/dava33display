@@ -2,6 +2,8 @@
 
 = Operating Systems =
 
+Booting Ubuntu 11.04 derivatives requires the NOMODESET boot option, when Ubuntu starts booting hit F1 to bring up the boot options.
+
 Out of box Ubuntu/MythTV (Mythbuntu 11.04) works fine for everything except the tuner cards. The tuner cards do NOT support NTSC (available in the US over cable) in MythTV, getting digital channels to work requires work. Oddly tvtime can show NTSC channels (without audio).
 
 Linux driver support:
