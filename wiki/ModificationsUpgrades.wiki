@@ -10,8 +10,10 @@ There are multiple reports of increasing memory and changing the CPU.
   * kieran.levin has installed 2Gb and a dual core CPU
 
 
-
-
 = Modifications =
 
   * Cooling enhancements TODO!
+
+= Peripherals =
+
+Regular keyboard/mouse can be plugged into USB ports.
