@@ -22,3 +22,14 @@ MCE drivers appear to link the IR port and the TFT display.
 Sound can be through hdmi, headphones, amp.
 
 Video (over hdmi) works out of the box but drivers can be downloaded from nvida.com (this may be required for audio over hdmi to work, the nvidia control panel has an option to disable audio).
+
+Windows install check list:
+
+
+  # ACPI driver
+  # ATI drivers (TFT, IR, sound)
+  # Tuner Hauppauge WinTV drivers
+  # GPU/Gfx nVidia
+  # MCE drivers
+
+The soundmax drivers _may_ be ignored.
