@@ -6,29 +6,60 @@ The display driver is for the USB TFT that comes as standard on the [http://www.
 
 = ASUS DAV A33=
 
-  * AMD Athlon 64 3800+
+  * AMD Athlon 64 3800+ AM2 (2.4Ghz)
   * 512Mb ram
   * TFT display (usb)
   * 2x Hauppauge card (TV/composite/S-VHS inputs)
-  * IR port (usb)
+  * IR port (usb)  - for 2 remotes (one for AMP, another for MCE) and keyboard+trackpad
   * ATI gfx built in
 
 
 
 = MOXI HOME CINEMA HD DMR model HDDMR9000 =
 
-Seen on ebay, usually described as a "ASUS HTPC with HDMI".
+Seen on ebay, usually described as a "ASUS HTPC with HDMI". It looks like an A33 unless the front drop down panel and rear is examined closely.
 
-This unit is like a cut down A33, but with NVIDA/nForce chipset instead of ATI.
+This unit is essentially a cut down A33; missing some ports (and WiFi) and with NVIDA/nForce chipset instead of ATI. Because of the differences to an A33, only some of the A33 drivers can be used.
 
   * AMD Athlon 64 3800+
   * 512Mb ram (2x 256Mb DDR2 667)
-  * TFT display (usb)
-  * 2x Hauppauge WinTV-1800 card (TV ONLY inputs) - NOTE some hardware ID software identifies these as Hauppauge HDPVR-1250 model 1196. One card is PCI-E 16x, the other is PCI-E 1x
+
+Mainboard/Chipset:
+  * ASUS M2NPV2-DHS motherboard with nVidia nForce 4 chipset
+  * 4x DDR2 slots in total (2 are usually used)
+  * NVIDIA GPU 6510LE built in HDMI (video and audio), also Component, S-Video, and composite
+  * SoundMax / Analog Devices AD1988B HD Audio with D2 Audio 5.1 channel amplifier
+  * RCA Audio
+  * SPDIF Optical Audio IN
+  * SPDIF Optical Audio OUT
+  * 1/4" Jack head phone socket (in front drop down panel )
+  * 3.5mm microphone socket (in front drop down panel ) (possible to use as line in?)
+  * E-SATA
+  * 3x USB 2.0 (2 in rear, 1 in front drop down panel)
+  * IEEE1394/FireWire
+  * Gigabit Ethernet (10/100/1000 network port)
+
+
+
+Other:
+  * 320GB 7200RPM SATA (Seagate 35.3) hard disk
+  * Slim slot DVD drive
+  * TFT display (usb) - what http://code.google.com/p/dava33display/ is all about. Under Windows with drivers this has the time and under Windows Media Center may list the current video name
+  * 2x Hauppauge 1800 PCI-Express dual tuner (HD+Analog) tuners with hardware MPEG encoder (TV ONLY inputs, i.e. no FM or RCA inputs) - NOTE some hardware ID software identifies these as Hauppauge HDPVR-1250 model 1196. One card is PCI-E 16x, the other is PCI-E 1x
   * IR port (usb)
-  * NVIDIA built in HDMI (also S-VHS and composite)
+  * Rotary volume control (with push butto action) - Under Windows with drivers this controls Windows volume control
+  * Front panel buttons: Menu, Left, Right, Up, Down, OK - Unsure how to use these. Menu button controls "effects" (Normal, Jazz, Rock, etc.)
+
+BIOS information:
+  * Phoenix - AwardBIOS v6.00PG
+  * ASUS M2NPV2-DHS ACPI BIOS Revision 0110
+  * BIOS: 06/28/2007-C51PV-MCP51-M2NPV2DH-00
+  * Keys:
+     * DEL - setup
+     * F8 - boot menu
+     * Esc - skip memory test (probably only visible with non quick boot option set in bios)
 
 
-The motherboard of the this unit is a M2NPV2-DHS, this appears to be very similar to the [http://www.asus.com/Motherboards/AMD_AM2/M2NPVMX/ M2NPV-MX] motherboard (minus a few pieces of hardware. The manual for the M2NPV-MX is useful for this machine even if the motherboard is not identical.
+The motherboard of the this unit is a M2NPV2-DHS, this appears to be very similar to the [http://www.asus.com/Motherboards/AMD_AM2/M2NPVMX/ M2NPV-MX] motherboard (minus a few pieces of hardware). The manual for the M2NPV-MX is useful for this machine even if the motherboard is not identical.
 
-There are multiple reports of increasing memory and changing the CPU.
+
