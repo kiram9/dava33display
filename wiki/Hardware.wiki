@@ -29,7 +29,7 @@ This unit is essentially a cut down A33; missing some ports (and WiFi) and with 
 Mainboard/Chipset:
   * ASUS M2NPV2-DHS motherboard with nVidia nForce 4 chipset
   * 4x DDR2 slots in total (2 are usually used)
-  * NVIDIA GPU 6510LE built in HDMI (video and audio), also Component, S-Video, and composite
+  * NVIDIA GPU GeForce 6510LE built in HDMI (video and audio), also Component, S-Video, and composite
   * SoundMax / Analog Devices AD1988B HD Audio with D2 Audio 5.1 channel amplifier
   * RCA Audio
   * SPDIF Optical Audio IN
