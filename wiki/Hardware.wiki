@@ -60,6 +60,7 @@ BIOS information:
      * DEL - setup
      * F8 - boot menu
      * Esc - skip memory test (probably only visible with non quick boot option set in bios)
+  * GFX setting in BIOS appears to be set to PCI-E (rather than internal VGA)
 
 
 The motherboard of the this unit is a M2NPV2-DHS, this appears to be very similar to the [http://www.asus.com/Motherboards/AMD_AM2/M2NPVMX/ M2NPV-MX] motherboard (minus a few pieces of hardware). The manual for the M2NPV-MX is useful for this machine even if the motherboard is not identical.
