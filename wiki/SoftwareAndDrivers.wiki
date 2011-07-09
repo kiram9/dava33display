@@ -1,0 +1,25 @@
+#summary Information about operating systems, software, and drivers
+
+= Operating Systems =
+
+Out of box Ubuntu/MythTV (Mythbuntu 11.04) works fine for everything except the tuner cards. The tuner cards do NOT support NTSC (available in the US over cable), getting digital channels to work requires work. Oddly tvtime can show NTSC channels (without audio).
+
+Linux driver support:
+  * http://www.linuxtv.org/wiki/index.php/ATSC_PCIe_Cards
+  * http://www.linuxtv.org/wiki/index.php/Hauppauge_WinTV-HVR-1800
+  * http://www.linuxtv.org/wiki/index.php/Talk:Hauppauge_WinTV-HVR-1800
+
+Sound over HDMI requires enabling digital channel in the Mixer.
+
+== Windows Vista ==
+
+Most things work out of the box. The Windows "find driver now" works for the tuner cards (but it is just as easy to download from http://www.hauppauge.com/site/products/data_hvr1800.html). Out of the box sound only works through headphones.
+
+The TFT display, IR port, and sound need the A33 drivers. Once installed the TFT displays a clock.
+
+MCE drivers appear to link the IR port and the TFT display.
+
+Sound can be through hdmi, headphones, amp.
+
+Video (over hdmi) works out of the box but drivers can be downloaded from nvida.com (this may be required for audio over hdmi to work, the nvidia control panel has an option to disable audio).
+
