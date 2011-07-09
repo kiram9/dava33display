@@ -47,3 +47,7 @@ The A33 appears to ship with a number of IR remote devices:
 need documentation and model numbers (and suitable replacements/alternatives).
 
 Under Linux LIRC works fine with the remote receiver, so any remote should be usable under Linux (e.g. an old TV remote).
+
+= GFX card =
+
+  * [http://groups.google.com/group/alt.comp.periphs.mainboard.asus/msg/e9c4c9bd4fec817e installed a gfx card with a separate hdmi connector, this required minor hacking of the card face plate]
