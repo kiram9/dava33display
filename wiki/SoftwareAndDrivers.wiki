@@ -34,6 +34,6 @@ Windows install check list:
   # A Series (ASUS) drivers (TFT, IR, sound), ASeries_V1030_V10507.zip
   # Tuner Hauppauge WinTV drivers
   # GPU/Gfx nVidia, 275.33-desktop-win7-winvista-32bit-english-whql / 275.33-desktop-win7-winvista-64bit-english-whql.exe
-  # MCE drivers, MCE_EXT_104.zip
+  # MCE drivers, MCE_EXT_104.zip / hauppauge_mcekit_setup.exe
 
 The soundmax drivers (SoundMAX_Audio_V610X6270_Audio.zip) _may_ be ignored.
