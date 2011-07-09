@@ -2,7 +2,7 @@
 
 = Operating Systems =
 
-Out of box Ubuntu/MythTV (Mythbuntu 11.04) works fine for everything except the tuner cards. The tuner cards do NOT support NTSC (available in the US over cable), getting digital channels to work requires work. Oddly tvtime can show NTSC channels (without audio).
+Out of box Ubuntu/MythTV (Mythbuntu 11.04) works fine for everything except the tuner cards. The tuner cards do NOT support NTSC (available in the US over cable) in MythTV, getting digital channels to work requires work. Oddly tvtime can show NTSC channels (without audio).
 
 Linux driver support:
   * http://www.linuxtv.org/wiki/index.php/ATSC_PCIe_Cards
@@ -22,4 +22,3 @@ MCE drivers appear to link the IR port and the TFT display.
 Sound can be through hdmi, headphones, amp.
 
 Video (over hdmi) works out of the box but drivers can be downloaded from nvida.com (this may be required for audio over hdmi to work, the nvidia control panel has an option to disable audio).
-
