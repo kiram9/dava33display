@@ -2,7 +2,7 @@
 
 = Introduction =
 
-The display driver is for the USB TFT that comes as standard on the ASUS DAV A33 HTPC. The display also comes with a not documented Moxi htpc, which comes in the same case as the A33.
+The display driver is for the USB TFT that comes as standard on the [http://www.asus.com/Desktop/Home_Theater_PC/DAV_Center_A33/#overview ASUS DAV A33 HTPC]. The display also comes with a not documented Moxi htpc, which comes in the same case as the A33.
 
 = ASUS DAV A33=
 
