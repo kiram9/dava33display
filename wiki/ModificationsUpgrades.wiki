@@ -6,7 +6,7 @@
 There are multiple reports of increasing memory and changing the CPU.
 
   * [http://groups.google.com/group/alt.comp.periphs.mainboard.asus/msg/e9c4c9bd4fec817e installed 4Gb RAM + AMD Athlon 64 X2 Dual Core 5400+]
-  * clach04 has installed 2x 2Gb DDR2-800, the existing memory is DDR2-667, if the 512Mb is removed the memory runs about 1Mb faster according to Memtest86+ or it can be left in for slower speed but 4.5Gb of RAM.
+  * clach04 has installed an extra 2x 2Gb DDR2-800, the existing memory is DDR2-667. According to Memtest86+ 4.10, the 4.5Gb runs at 2699 Mb/s, if the 512Mb is removed the 4Gb of memory runs 3455 MB/s (about 1Mb faster).
   * kieran.levin has installed 2Gb and a dual core CPU
 
 
