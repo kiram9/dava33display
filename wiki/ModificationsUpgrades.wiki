@@ -7,7 +7,7 @@ There are multiple reports of increasing memory and changing the CPU.
 
   * [http://groups.google.com/group/alt.comp.periphs.mainboard.asus/msg/e9c4c9bd4fec817e installed 4Gb RAM + AMD Athlon 64 X2 Dual Core 5400+]
   * clach04 has installed an extra 2x 2Gb DDR2-800, the existing memory is DDR2-667. According to Memtest86+ 4.10, the 4.5Gb runs at 2699 Mb/s, if the 512Mb is removed the 4Gb of memory runs 3455 MB/s (about 1Mb faster).
-  * kieran.levin has installed 2Gb and a dual core CPU
+  * kieran.levin has installed 2Gb and an AMD Athlon(tm) 64 X2 Dual Core Processor 5600+
 
 
 == Memory / RAM ==
@@ -47,4 +47,3 @@ The A33 appears to ship with a number of IR remote devices:
 need documentation and model numbers (and suitable replacements/alternatives).
 
 Under Linux LIRC works fine with the remote receiver, so any remote should be usable under Linux (e.g. an old TV remote).
-
