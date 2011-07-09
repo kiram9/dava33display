@@ -24,7 +24,7 @@ This unit is like a cut down A33, but with NVIDA/nForce chipset instead of ATI.
   * AMD Athlon 64 3800+
   * 512Mb ram (2x 256Mb DDR2 667)
   * TFT display (usb)
-  * 2x Hauppauge WinTV-1800 card (TV ONLY inputs) - NOTE some hardware ID software identifies these as WinTV-1250. One card is PCI-E 16x, the other is PCI-E 1x
+  * 2x Hauppauge WinTV-1800 card (TV ONLY inputs) - NOTE some hardware ID software identifies these as Hauppauge HDPVR-1250 model 1196. One card is PCI-E 16x, the other is PCI-E 1x
   * IR port (usb)
   * NVIDIA built in HDMI (also S-VHS and composite)
 
