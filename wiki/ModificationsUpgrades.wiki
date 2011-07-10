@@ -48,9 +48,9 @@ need documentation and model numbers (and suitable replacements/alternatives).
 
 Under Linux LIRC works fine with the remote receiver, so any remote should be usable under Linux (e.g. an old TV remote).
 
-Under WIndows need A Series drivers installed. If you do not have an MCE remote but have a universal remote configure the remote to emulate a Philips MCP-9350I/03. The Philips remote is like the RC1974506/00 depicted at http://www.mythtv.org/wiki/MCE_Remote.
+Under Windows the ASUS A Series drivers need to be installed. If you do not have an MCE remote but have a universal remote configure the remote to emulate a Philips MCP-9350I/03. The Philips remote is like the RC1974506/00 depicted at http://www.mythtv.org/wiki/MCE_Remote. Also see this thread http://www.avsforum.com/avs-vb/showthread.php?t=1314366 where more advanced remote options are mentioned (Microsoft  MCE-1039 and for Logitech Harmony users see [http://forums.logitech.com/t5/Harmony-Remotes-Programming/Expanded-control-for-Windows-Media-Center-now-available-in-our/td-p/374844?nobounce Microsoft Windows Media Center SE]).
 
-The way the Windows software is setup, the "Windows Media" green start button must be pressed first (to launch MCE),then things like the volume control buttons work. Volume buttons do NOT work unless MCE is loaded.
+*NOTE* The way the Windows software is setup, the "Windows Media" green start button must be pressed first (to launch MCE),then things like the volume control buttons work. Volume buttons do NOT work unless MCE is loaded.
 
 = GFX card =
 
