@@ -66,3 +66,7 @@ BIOS information:
 The motherboard of the this unit is a M2NPV2-DHS, this appears to be very similar to the [http://www.asus.com/Motherboards/AMD_AM2/M2NPVMX/ M2NPV-MX] motherboard (minus a few pieces of hardware). The manual for the M2NPV-MX is useful for this machine even if the motherboard is not identical.
 
 For information on upgrading the hardware see ModificationsUpgrades.
+
+
+Some of the hardware was manafactured by iCreate Technologies Corporation. http://wikimapia.org/1787927/cn/iCreate-Technologies-Corporation-%E6%88%91%E6%83%B3%E7%A7%91%E6%8A%80%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8 they do not appear to be in business any more.
+
