@@ -21,9 +21,9 @@ Out of the box every thing works. gfx over hdmi is fine. Sound is fine have to s
 
 Only 3 devices shows as unknown in the Control panel, Device Manager:
 
-  * ASeries Device (USB\VID_1043$PID_82B2&REV_0001&MI_00) - Unsure, may be to control amp? Volume control on unit does NOT work in Media center out of box
+  * ASeries Device (USB\VID_1043$PID_82B2&REV_0001&MI_00) - TFT screen - iCreate Technologies Corp
   * Unknown device (ACPI\ATK0110) - Seen Vista notes on ACPI
-  * Unknown device (USB\VID_04E3&PID_2009&REV_0000) - probably TFT screen
+  * Unknown device (USB\VID_04E3&PID_2009&REV_0000) - D2 Audio device Unsure, may be to control amp? Volume control knob on unit does NOT work in Media center out of box.
 
 Drivers are installed for the IR port and the Media Center Start button on the remote starts MCE. It looks like an IR keyboard/mouse would work (based on installed drivers list) but I do not have hardware to confirm that.
 
