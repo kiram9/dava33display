@@ -15,6 +15,20 @@ Sound over HDMI requires enabling digital channel in the Mixer.
 
 Some distros may have a minor mismatch in sound settings; audio output only supports sample rate of 48khz - and pulse defaults to 44.1 so you have to force it using "default-sample-rate = 48000" in /etc/pulse/daemon.conf 
 
+== Windows 7 ==
+
+Out of the box every thing works. gfx over hdmi is fine. Sound is fine (have to select the correct output device in sound mixer, viz. "Digital Audio (S/PDIF) High Definition Audio Device" for sound over HDMI to work). No need for drivers unless control over headphone as a separate device and Dolby control is needed.
+
+Only 3 devices shows unknown in the Control panel, Device Manager:
+
+  * ASeries Device
+  * Unknown device (ACPI\ATK0110)
+  * Unknown device (USB\VID_04E&PID_2009&REV_0000)
+
+Drivers are installed for the IR port and the Media Center Start button on the remote starts MCE. It looks like an IR keyboard/mouse would work (based on installed drivers list) but I do not have hardware to confirm that.
+
+The HD Tuners show up.
+
 == Windows Vista ==
 
 Most things work out of the box. The Windows "find driver now" works for the tuner cards (but it is just as easy to download from http://www.hauppauge.com/site/products/data_hvr1800.html). Out of the box sound only works through headphones.
@@ -25,7 +39,7 @@ MCE drivers appear to link the IR port and the TFT display.
 
 Sound can be through hdmi, headphones, amp.
 
-Video (over hdmi) works out of the box but drivers can be downloaded from nvida.com (this may be required for audio over hdmi to work, the nvidia control panel has an option to disable audio).
+Video (over hdmi) works out of the box (but with a pink tinge, i.e. white shows a pink, correct drivers correct this) but drivers can be downloaded from nvida.com (this may be required for audio over hdmi to work, the nvidia control panel has an option to disable audio).
 
 Windows install check list:
 
