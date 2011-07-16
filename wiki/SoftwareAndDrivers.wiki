@@ -17,9 +17,9 @@ Some distros may have a minor mismatch in sound settings; audio output only supp
 
 == Windows 7 ==
 
-Out of the box every thing works. gfx over hdmi is fine. Sound is fine (have to select the correct output device in sound mixer, viz. "Digital Audio (S/PDIF) High Definition Audio Device" for sound over HDMI to work). No need for drivers unless control over headphone as a separate device and Dolby control is needed.
+Out of the box every thing works. gfx over hdmi is fine. Sound is fine have to select the correct output device in sound mixer (and set default in Control Panel), viz. "Digital Audio (S/PDIF) High Definition Audio Device" for sound over HDMI to work. Headphone socket shows as a separate device.
 
-Only 3 devices shows unknown in the Control panel, Device Manager:
+Only 3 devices shows as unknown in the Control panel, Device Manager:
 
   * ASeries Device
   * Unknown device (ACPI\ATK0110)
