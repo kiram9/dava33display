@@ -1,0 +1,23 @@
+#summary Build information and tips
+
+= Ubuntu =
+
+As per front page, using the Ajunta IDE is fairly easy. Another option is automake. The configure script requires automake to be installed. The automake scripts in the source directory are actual soft links to automake-1.11. Other versions may work but the soft links will need to be updated.
+
+Build requirements are documented on the front page but to build without Ajunta:
+
+
+{{{
+sudo apt-get install automake  build-essential libusb-dev libgd2-xpm-dev
+}}}
+
+NOTE libusb is version 0.1 (not the newer 1.0).
+
+
+= Running =
+
+If using pre-built binaries, need libusb (usually already installed) and libgd:
+
+{{{
+sudo apt-get install libgd2-xpm
+}}}
