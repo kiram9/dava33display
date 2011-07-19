@@ -4,7 +4,7 @@
 
 Booting Ubuntu 11.04 derivatives requires the NOMODESET boot option, when Ubuntu starts booting hit F1 to bring up the boot options. Without the NOMODESET option a black screen is displayed.
 
-Out of box Ubuntu/MythTV ([http://www.mythbuntu.org/ Mythbuntu] 11.04) works fine for everything except the tuner cards. The tuner cards do NOT support NTSC (available in the US over cable) in MythTV, getting digital channels to work requires work. Oddly tvtime can show NTSC channels (without audio).
+Out of box Ubuntu/MythTV ([http://www.mythbuntu.org/ Mythbuntu] 11.04) works fine for everything except the tuner cards. Under Linux the tuner cards do NOT support NTSC (available in the US over cable) in MythTV, getting digital channels to work requires work. Oddly tvtime can show NTSC channels (without audio).
 
 Linux driver support:
   * http://www.linuxtv.org/wiki/index.php/ATSC_PCIe_Cards
@@ -28,6 +28,10 @@ Only 3 devices shows as unknown in the Control panel, Device Manager:
 Drivers are installed for the IR port and the Media Center Start button on the remote starts MCE. It looks like an IR keyboard/mouse would work (based on installed drivers list) but I do not have hardware to confirm that.
 
 The HD Tuners show up.
+
+The tuner cards do work with NTSC (available in the US over cable),
+I've not been able to get clear QAM to work.
+ATSC (over the air seems to work - using the "secondary" port)
 
 == Windows Vista ==
 
