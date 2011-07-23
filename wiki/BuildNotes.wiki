@@ -21,3 +21,7 @@ If using pre-built binaries, need libusb (usually already installed) and libgd:
 {{{
 sudo apt-get install libgd2-xpm
 }}}
+Or
+{{{
+sudo apt-get install libgd2-noxpm
+}}}
