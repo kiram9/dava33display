@@ -25,3 +25,8 @@ Or
 {{{
 sudo apt-get install libgd2-noxpm
 }}}
+
+
+== TinyCore / MicroCore Linux ==
+
+asusdisplay can work with [http://tinycorelinux.com Tiny Core] however as of July 2011 the libusb provided with TC 3.7.1 doesn't work with dava33display - see http://forum.tinycorelinux.net/index.php?topic=10818.0 for more details and the work around (don't install libusb.tcz and copy the shared library from Ubuntu).
