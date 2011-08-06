@@ -2,7 +2,13 @@
 
 = Introduction =
 
-There is now a Pure Python version that relies on [http://sourceforge.net/projects/pyusb/ PyUSB]. It has been developed against PyUSB 1.0, so older versions of PyUSB (for example the Ubuntu 10.10 package python-usb is too old). Because of the new PyUSB library, support for different USB libraries is available.
+There is now a Pure Python version that relies on:
+  * [http://sourceforge.net/projects/pyusb/ PyUSB].
+  * [http://www.pythonware.com/products/pil/ PIL] - Ubuntu includes this as part of the regular installation
+
+It has been developed against PyUSB 1.0, so older versions of PyUSB (for example the Ubuntu 10.10 package python-usb is too old). Because of the new PyUSB library, support for different USB libraries is available.
+
+It has been tested with Python 2.5 and 2., but any 2.x version that is 2.4 or later should work (older releases could be supported if needed).
 
 It works on both 32 and 64 bit Linux.
 
