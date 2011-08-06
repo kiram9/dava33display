@@ -1,0 +1,9 @@
+#summary Python version of asusdisplay
+
+= Introduction =
+
+There is now a Pure Python version that relies on [http://sourceforge.net/projects/pyusb/ PyUSB]. It has been developed against PyUSB 1.0, so older versions of PyUSB (for example the Ubuntu 10.10 package python-usb is too old). Because of the new PyUSB library, support for different USB libraries is available.
+
+It works on both 32 and 64 bit Linux.
+
+Like the C version, some Linux distributions (like Ubuntu) require root access to access the USB port unless a udev rule is added.
