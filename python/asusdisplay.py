@@ -45,6 +45,7 @@ Main differences compared with C version:
   * Currently only loads image then quits (no multiple image update)
 """
 
+import os
 import sys
 
 
@@ -174,6 +175,8 @@ class DavDisplay(object):
         """
         self.packet_count = 0
         self.dev = None
+        self._platform = os.name
+
         
     def displayinit(self):
         """Similar to C version of () and displayinit()
@@ -197,6 +200,11 @@ class DavDisplay(object):
             dev.detach_kernel_driver(1)
         except usb.core.USBError, info:
             pass  # assume everything is OK
+        except AttributeError, info:
+            # Ignore under Windows, missing with libusb-0.1
+            # NOTE no backend check below, just platform
+            if self._platform != 'nt':
+                raise
         
         self.dev = dev
         
@@ -215,7 +223,8 @@ class DavDisplay(object):
     def close(self):
         """Similar to C version of close
         """
-        self.dev.reset()
+        if self._platform != 'nt':
+            self.dev.reset()
         #del(self.dev)  #? TODO
     
     def sendimage(self, rawimage):
