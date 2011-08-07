@@ -36,3 +36,5 @@ Install drivers for both before using asusdisplay. In theory the driver is avail
   * RFB Protocol support (think VNC)
   * MythTV LCD support
   * Windows MCE (Media Center Edition) LCD support - "Recording" notices, Show titles, etc.
+  * URL support (i.e. load images from a website)
+  * Random image support
