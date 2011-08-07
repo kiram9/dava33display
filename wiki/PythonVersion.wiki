@@ -13,3 +13,12 @@ It has been tested with Python 2.5 and 2., but any 2.x version that is 2.4 or la
 It works on both 32 and 64 bit Linux.
 
 Like the C version, some Linux distributions (like Ubuntu) require root access to access the USB port unless a udev rule is added.
+
+= Roadmap / Possible Futures =
+
+  * Windows installation instructions - libusb installs are more complex under Windows
+  * Time support
+  * Other information support (think [http://conky.sourceforge.net/ Conky])
+  * RFB Protocol support (think VNC)
+  * MythTV LCD support
+  * Windows MCE (Media Center Edition) LCD support - "Recording" notices, Show titles, etc.
