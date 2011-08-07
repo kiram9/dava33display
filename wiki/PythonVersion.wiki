@@ -10,9 +10,23 @@ It has been developed against PyUSB 1.0, so older versions of PyUSB (for example
 
 It has been tested with Python 2.5 and 2., but any 2.x version that is 2.4 or later should work (older releases could be supported if needed).
 
-It works on both 32 and 64 bit Linux.
+It works on both 32 and 64 bit Linux. It has been tested under Windows 7 (32 bit) with libusb-0.1.
+
+= Linux Notes =
 
 Like the C version, some Linux distributions (like Ubuntu) require root access to access the USB port unless a udev rule is added.
+
+
+= Windows Notes =
+
+libusb under Windows is a slightly different beast compared with Linux. Under Linux the libusb libaray and just be opened and used to access USB devices on the system (with root/sudo permissions). Under Windows, the libusb libraries need to be installed as drivers for the device in question. inf-wizard shipped in the bin directory of libusb performs the task of listing the devices and then creating (and installing) the driver.
+
+Under Windows the TFT display shows up as:
+
+  * "ASeries Device (Interface 1)"
+  * "ASeries Device (Interface 0)"
+
+Install drivers for both before using asusdisplay. In theory the driver is available to use immediately after installation, however a reboot may be required (and is recommended) before attempting to use asusdisplay under Windows.
 
 = Roadmap / Possible Futures =
 
