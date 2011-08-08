@@ -43,11 +43,23 @@ Main differences compared with C version:
     see C code and documents for more detail on the protocol
   * Currently only loads an image (no time support)
   * Currently only loads image then quits (no multiple image update)
+
+NOTE it is important to allow asusdisplay to complete an IO cycle
+(e.g. complete image load) before interupting, aborting part way through
+can leave the display locked until the next reboot.
+I've not yet looked at doing resets to recover from this situation.
 """
 
 import os
 import sys
-
+import string
+import re
+import random
+import urllib2
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import StringIO
 
 try:
     from PIL import Image    # http://www.pythonware.com/products/pil/
@@ -176,8 +188,7 @@ class DavDisplay(object):
         self.packet_count = 0
         self.dev = None
         self._platform = os.name
-
-        
+    
     def displayinit(self):
         """Similar to C version of () and displayinit()
         
@@ -316,18 +327,80 @@ class DavDisplay(object):
         return result
 
 
+def gen_images_urls(search_term=None, random_offset=True):
+    """Quick-n-dirty random image URL generator.
+    Uses google, and google's image cache and thus tends to only have small images
+    Also google images tend to be "safe"
+    """
+    RE_IMAGEURL = re.compile('"(http.+?gstatic.com/images.+?)"')  # filter googles copies of the static images
+    word_list = []
+    charset = string.ascii_lowercase * 2 + string.digits
+    
+    if not search_term:
+        # generate complete garbage - not a real (English) word
+        for i in range(random.randint(2, 7)):
+            word_list.append(random.choice(charset))
+        search_term = ''.join(word_list)
+    
+    #limit_size = '&tbs=isz:ex,iszw:320,iszh:240'  # 320x240 - note only useful if getting original image
+    limit_size = "&tbs=isz:lt,islt:2mp"  #  Larger than 2MP
+    if random_offset:
+        start_offset = (random.randint(0, 50) * 10)  # Randomize the start page
+    else:
+        start_offset = 0
+    request_url = 'http://images.google.com/images?q=%s&start=%d' % (search_term, start_offset)
+    request_url += limit_size
+    request_hdr = {'User-Agent': 'random/1.0'}
+    
+    request = urllib2.Request(request_url, None, request_hdr)
+    html = urllib2.urlopen(request).read()
+    """TODO? detect "did not match any documents."? will need "&hl=en" adding
+    NOTE at this point have links to "small" google static cache in html,
+    also have embedded data:image (base64) slightly larger than "small"
+    images that could be extracted and ran through mime"""
+    
+    matches = RE_IMAGEURL.findall(html)
+    for hit in matches:
+        if hit.startswith('http') and len(hit) < 128 and 'gstatic.com/images':
+            # this complex if basically skips the first regexp hit (could just ignore matches[0] I supposed, really need to fix regx
+            yield hit
+
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv
     
-    image_filename = argv[1]
-    print 'reading', image_filename
-    im = Image.open(image_filename)
-    rawimage = image2raw(im)
+    do_random = False
+    if '--random' in argv:
+        do_random = True
+    
+    if do_random:
+        # DEBUG mode, useful for soak testing to make sure LOTS of updates work
+        print 'getting random images....'
+        image_list = []
+        for url in gen_images_urls(search_term='maps', random_offset=False):
+            print url
+            fobj = urllib2.urlopen(url)
+            image_data = fobj.read()
+            fileptr = StringIO.StringIO(image_data)  # fobj is missing seek() required by PIL
+            im = Image.open(fileptr)
+            rawimage = image2raw(im)
+            image_list.append(rawimage)
+    else:
+        image_filename = argv[1]
+        print 'reading', image_filename
+        im = Image.open(image_filename)
+        rawimage = image2raw(im)
 
     display = DavDisplay()
     display.displayinit()
-    display.sendimage(rawimage)
+    if do_random:
+        while 1:
+            for rawimage in image_list:
+                # TODO need fps
+                display.sendimage(rawimage)
+    else:
+        display.sendimage(rawimage)
     display.close()
     
     return 0
