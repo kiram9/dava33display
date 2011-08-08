@@ -56,6 +56,7 @@ import string
 import re
 import random
 import urllib2
+import time
 try:
     import cStringIO as StringIO
 except ImportError:
@@ -63,9 +64,11 @@ except ImportError:
 
 try:
     from PIL import Image    # http://www.pythonware.com/products/pil/
+    from PIL import ImageFont, ImageDraw, ImageOps
 except ImportError:
     try:
         import Image    # http://www.pythonware.com/products/pil/
+        import ImageFont, ImageDraw, ImageOps
     except ImportError:
         raise  # Potential to remove dependency on PIL
 
@@ -118,13 +121,37 @@ else:
 
 MAX_IMAGE_SIZE = (320, 240)
 
+#clock_font = ImageFont.load_default()
+clock_font = None
+for font_filename, font_size in [
+                                #('orbitron-black.ttf', 60),  # not proportional
+                                #('orbitron-bold.ttf', 60),
+                                #('orbitron-medium.ttf', 60),
+                                ('FreeSansBold.ttf', 72),
+                                ('/usr/share/fonts/truetype/freefont/FreeSansBold.ttf', 72),
+                                ('/usr/share/fonts/luxisr.ttf', 72),  # this leaves some spacce on RHS
+                                ]:
+    try:
+        clock_font = ImageFont.truetype(font_filename, font_size)
+        print font_filename, font_size
+        break
+    except IOError:
+        pass
+# FIXME set clock color/colour, this really should be a parameter/config setting
+#clock_color = (255, 0, 0)
+clock_color = (255, 255, 255)  # white matches what c version of asusdisplay
 
-def image2raw(im):
-    """Convert a PIL image into raw format suitable for ASUS A33 DAV screen
-    
-    returns raw buffer
+def simpleimage_clock(im):
+    """Apply timestamp to image.
+    This is NOT (yet?) the same format as c version of asusdisplay
     """
+    my_text = time.strftime('%H:%M:%S')
+    d = ImageDraw.Draw(im)
+    d.text((0, 0), my_text, font=clock_font, fill=clock_color)
     
+    return im
+
+def simpleimage_resize(im):
     if im.size > MAX_IMAGE_SIZE:
         print 'resizing'
         """resize - maintain aspect ratio
@@ -146,13 +173,29 @@ def image2raw(im):
         background.paste(im, (0, 0, x, y))  # does not center/centre
         im = background
     
-    """final convert to RGB
-    (in case image was the correct size already and indexed)
-    - TODO add check around this"""
+    return im
+
+def image2raw(im):
+    """Convert a PIL image into raw format suitable for ASUS A33 DAV screen
+    
+    returns raw buffer
+    """
+    
+    im = simpleimage_resize(im)  # do not assume image is correct size
+    
+    """ convert to RGB
+    - TODO add check around this, image may alreayd be RGB"""
     im = im.convert('RGB')
     x = im.getdata()
     newbuff = ''.join([''.join(map(chr, rgb_tuple)) for rgb_tuple in x])
     return newbuff
+
+def process_image(im, include_clock=True):
+    im = simpleimage_resize(im)
+    if include_clock:
+        simpleimage_clock(im)
+    rawimage = image2raw(im)
+    return rawimage
 
 
 def raw2png(raw_filename, image_filename):
@@ -370,7 +413,11 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     
+    # Super horrible command line checking
     do_random = False
+    include_clock=True
+    if '--no_clock' in argv:
+        include_clock=False
     if '--random' in argv:
         do_random = True
     
@@ -390,7 +437,7 @@ def main(argv=None):
         image_filename = argv[1]
         print 'reading', image_filename
         im = Image.open(image_filename)
-        rawimage = image2raw(im)
+        rawimage = process_image(im, include_clock=include_clock)
 
     display = DavDisplay()
     display.displayinit()
