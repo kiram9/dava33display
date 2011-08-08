@@ -19,6 +19,8 @@ Like the C version, some Linux distributions (like Ubuntu) require root access t
 
 = Windows Notes =
 
+libusb-0.1, aka libusb-win32 has been tested with Windows 7 (32 bit), other Windows platforms should work fine too. Download from https://sourceforge.net/projects/libusb-win32/files/libusb-win32-releases/ (version 1.2.4.0 has been tested, 1.2.5.0 should work better due to improved reset support).
+
 libusb under Windows is a slightly different beast compared with Linux. Under Linux the libusb libaray and just be opened and used to access USB devices on the system (with root/sudo permissions). Under Windows, the libusb libraries need to be installed as drivers for the device in question. inf-wizard shipped in the bin directory of libusb performs the task of listing the devices and then creating (and installing) the driver.
 
 Under Windows the TFT display shows up as:
@@ -30,9 +32,8 @@ Install drivers for both before using asusdisplay. In theory the driver is avail
 
 = Roadmap / Possible Futures =
 
-  * Windows installation instructions - libusb installs are more complex under Windows
   * Time support
-  * Other information support (think [http://conky.sourceforge.net/ Conky])
+  * Other information support (think [http://conky.sourceforge.net/ Conky] / [https://launchpad.net/~m-buck/+archive/gtk-desktop-info gtk-desktop-info] (gtk-desktop-info is written in Python but uses html output))
   * RFB Protocol support (think VNC)
   * MythTV LCD support
   * Windows MCE (Media Center Edition) LCD support - "Recording" notices, Show titles, etc.
