@@ -22,8 +22,12 @@
 
 Main differences compared with C version:
   * Requires Python 2.x, PIL, pyusb 1.x (does not work with pyusb 0.1,
-    but does work with libusb-0.1. pyusb revision 90 from svn works fine)
+    but does work with libusb-0.1 and libusb-1.0. pyusb revision 90
+    from svn works fine)
   * Should work with any USB library on any platform
+      * Tested with Windows:
+        * 32 bit Windows 7 with:
+              * libusb-0.1 / libusb-win32
       * Tested with Linux:
           * 32 bit Tiny Core with:
               * libusb-0.1
@@ -41,8 +45,8 @@ Main differences compared with C version:
       * this can load the testimg.bmp provided in SVN repo
   * Doesn't really understand the protocol (or packet contents) used,
     see C code and documents for more detail on the protocol
-  * Currently only loads an image (no time support)
-  * Currently only loads image then quits (no multiple image update)
+  * Currently only loads image then quits (no multiple image update,
+    unless using debug random mode)
 
 NOTE it is important to allow asusdisplay to complete an IO cycle
 (e.g. complete image load) before interupting, aborting part way through
