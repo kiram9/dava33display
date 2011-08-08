@@ -45,7 +45,6 @@ Main differences compared with C version:
       * this can load the testimg.bmp provided in SVN repo
   * Doesn't really understand the protocol (or packet contents) used,
     see C code and documents for more detail on the protocol
-  * Currently only loads image then quits (no multiple image update,
     unless using debug random mode)
 
 NOTE it is important to allow asusdisplay to complete an IO cycle
@@ -149,6 +148,11 @@ def simpleimage_clock(im):
     """Apply timestamp to image.
     This is NOT (yet?) the same format as c version of asusdisplay
     """
+    """this could be avoided if font was printed with a black background
+    (would also help with colors, e.g. white text on white image,
+    if black bar pasted first it would be readable)"""
+    im = im.copy()
+    
     my_text = time.strftime('%H:%M:%S')
     d = ImageDraw.Draw(im)
     d.text((0, 0), my_text, font=clock_font, fill=clock_color)
@@ -197,7 +201,7 @@ def image2raw(im):
 def process_image(im, include_clock=True):
     im = simpleimage_resize(im)
     if include_clock:
-        simpleimage_clock(im)
+        im = simpleimage_clock(im)
     rawimage = image2raw(im)
     return rawimage
 
@@ -419,11 +423,14 @@ def main(argv=None):
     
     # Super horrible command line checking
     do_random = False
-    include_clock=True
+    daemon_mode = False
+    include_clock = True
     if '--no_clock' in argv:
         include_clock=False
     if '--random' in argv:
         do_random = True
+    if '--daemon_mode' in argv:
+        daemon_mode = True
     
     if do_random:
         # DEBUG mode, useful for soak testing to make sure LOTS of updates work
@@ -441,6 +448,7 @@ def main(argv=None):
         image_filename = argv[1]
         print 'reading', image_filename
         im = Image.open(image_filename)
+        im = simpleimage_resize(im)
         rawimage = process_image(im, include_clock=include_clock)
 
     display = DavDisplay()
@@ -452,6 +460,15 @@ def main(argv=None):
                 display.sendimage(rawimage)
     else:
         display.sendimage(rawimage)
+        while daemon_mode:
+            # FIXME add interupt handler than would unset daemon_mode
+            """NOTE with "standard" CPU AMD Athlon(tm) 64 Processor 3800+
+            daemon mode takes 12-17% of CPU time (according to top)
+            """
+            time.sleep(1)  # sleep 1 second - FIXME this simple timer approach needs improving
+            rawimage = process_image(im, include_clock=include_clock)
+            display.sendimage(rawimage)
+                
     display.close()
     
     return 0
