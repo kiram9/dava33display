@@ -32,7 +32,7 @@ Install drivers for both before using asusdisplay. In theory the driver is avail
 
 = Roadmap / Possible Futures =
 
-  * Time support
+  * Improved time (date) support
   * Other information support (think [http://conky.sourceforge.net/ Conky] / [https://launchpad.net/~m-buck/+archive/gtk-desktop-info gtk-desktop-info] (gtk-desktop-info is written in Python but uses html output))
   * RFB Protocol support (think VNC)
   * MythTV LCD support
