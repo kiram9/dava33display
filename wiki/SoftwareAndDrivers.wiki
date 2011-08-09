@@ -1,6 +1,6 @@
 #summary Information about operating systems, software, and drivers
 
-<wiki:toc max_depth="1" />
+<wiki:toc max_depth="3" />
 
 = Operating Systems =
 
