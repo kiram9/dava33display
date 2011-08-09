@@ -1,7 +1,8 @@
 #summary Information on upgraded and modifying hardware
 
-= Upgrades =
+<wiki:toc max_depth="3" />
 
+= Upgrades =
 
 There are multiple reports of increasing memory and changing the CPU.
 
