@@ -150,7 +150,6 @@ for font_filename, font_size in [
 #clock_color = (255, 255, 255)
 clock_color = 255  # NOTE TinyCore 3.7.1, Python 2.6.5 and pil-2.6 screws up image colors when tetx "fill" is specified as a tuple, this works around this problem
 
-
 def simpleimage_clock(im):
     """Apply timestamp to image.
     This is NOT (yet?) the same format as c version of asusdisplay
@@ -163,6 +162,9 @@ def simpleimage_clock(im):
     return im
 
 def read_temp(filename):
+    if isinstance(filename, int):
+        # DEBUG
+        return filename
     f = open(filename)
     temp = f.read()
     f.close()
@@ -528,6 +530,7 @@ def main(argv=None):
             temp_mb = None
             print 'warning: Motherboard temp file missing, install and configure lm-sensors'
         #temp_cpu, temp_mb = None, None  # Disable temp sensors
+        #temp_cpu, temp_mb = 28, 39  # Debug enable temp sensors
         rawimage = process_image(im, include_clock=include_clock, temp_cpu=temp_cpu, temp_mb=temp_mb)
 
     if DEBUG_DISPLAY:
