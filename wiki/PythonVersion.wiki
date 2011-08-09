@@ -1,5 +1,7 @@
 #summary Python version of asusdisplay
 
+<wiki:toc max_depth="3" />
+
 = Introduction =
 
 There is now a Pure Python version that relies on:
