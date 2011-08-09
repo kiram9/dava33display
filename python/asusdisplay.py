@@ -137,6 +137,7 @@ for font_filename, font_size in [
     try:
         clock_font = ImageFont.truetype(font_filename, font_size)
         print font_filename, font_size
+        temp_font = ImageFont.truetype(font_filename, font_size / 2)
         break
     except IOError:
         pass
@@ -147,15 +148,39 @@ clock_color = (255, 255, 255)  # white matches what c version of asusdisplay
 def simpleimage_clock(im):
     """Apply timestamp to image.
     This is NOT (yet?) the same format as c version of asusdisplay
+    NOTE modifies image in place
     """
-    """this could be avoided if font was printed with a black background
-    (would also help with colors, e.g. white text on white image,
-    if black bar pasted first it would be readable)"""
-    im = im.copy()
-    
     my_text = time.strftime('%H:%M:%S')
     d = ImageDraw.Draw(im)
     d.text((0, 0), my_text, font=clock_font, fill=clock_color)
+    
+    return im
+
+def read_temp(filename):
+    f = open(filename)
+    temp = f.read()
+    f.close()
+    temp = temp.strip()
+    temp_c = int(temp) / 1000  # my machine only does whole numbers
+    return temp_c
+
+def simpleimage_temperator(im, temp_cpu=False, temp_mb=False):
+    """Apply temperator to image.
+    This is NOT (yet?) the same format as c version of asusdisplay
+    NOTE modifies image in place
+    """
+    d = ImageDraw.Draw(im)
+    # FIXME need better method of calculating position
+    start_pos = 100  # getsize call?
+    off_set = 40  # getsize call?
+    if temp_cpu:
+        degree_sign = u'\u00b0'  # or empty string...
+        my_text = 'CPU: %02d%sC' % (read_temp(temp_cpu), degree_sign)  # optionally add degree sign? Required Unicode font (or at least non-ASCII, e.g. latin1 font is fine)
+        d.text((0, start_pos), my_text, font=temp_font, fill=clock_color)
+    if temp_mb:
+        #my_text = 'Motherboard %r C' % read_temp(temp_mb)
+        my_text = 'MB: %02d%sC' % (read_temp(temp_mb), degree_sign)
+        d.text((0, start_pos+ off_set), my_text, font=temp_font, fill=clock_color)
     
     return im
 
@@ -198,10 +223,21 @@ def image2raw(im):
     newbuff = ''.join([''.join(map(chr, rgb_tuple)) for rgb_tuple in x])
     return newbuff
 
-def process_image(im, include_clock=True):
+def process_image(im, include_clock=True, temp_cpu=False, temp_mb=False):
     im = simpleimage_resize(im)
+    
+    # FIXME for some reason specifying text color screws up image colors :-(
+    # Seen with TinyCore Py 2.6 and pil - not sure if this is PIL or my code
+    if temp_cpu or temp_mb or include_clock:
+        """this could be avoided if font was printed with a black background
+        (would also help with colors, e.g. white text on white image,
+        if black bar pasted first it would be readable)"""
+        im = im.copy()
+    
     if include_clock:
         im = simpleimage_clock(im)
+    if temp_cpu or temp_mb:
+        im = simpleimage_temperator(im, temp_cpu=temp_cpu, temp_mb=temp_mb)
     rawimage = image2raw(im)
     return rawimage
 
@@ -449,7 +485,16 @@ def main(argv=None):
         print 'reading', image_filename
         im = Image.open(image_filename)
         im = simpleimage_resize(im)
-        rawimage = process_image(im, include_clock=include_clock)
+        # Just default/assume temperator device location
+        temp_cpu = '/sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ATK0110:00/hwmon/hwmon1/temp1_input'
+        temp_mb = '/sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ATK0110:00/hwmon/hwmon1/temp2_input'
+        if not os.path.exists(temp_cpu):
+            temp_cpu = None
+            print 'warning: CPU temp file missing, install and configure lm-sensors'
+        if not os.path.exists(temp_mb):
+            temp_mb = None
+            print 'warning: Motherboard temp file missing, install and configure lm-sensors'
+        rawimage = process_image(im, include_clock=include_clock, temp_cpu=temp_cpu, temp_mb=temp_mb)
 
     display = DavDisplay()
     display.displayinit()
@@ -466,7 +511,7 @@ def main(argv=None):
             daemon mode takes 12-17% of CPU time (according to top)
             """
             time.sleep(1)  # sleep 1 second - FIXME this simple timer approach needs improving
-            rawimage = process_image(im, include_clock=include_clock)
+            rawimage = process_image(im, include_clock=include_clock, temp_cpu=temp_cpu, temp_mb=temp_mb)
             display.sendimage(rawimage)
                 
     display.close()
