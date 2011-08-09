@@ -1,5 +1,7 @@
 #summary Hardware overview
 
+<wiki:toc max_depth="3" />
+
 = Introduction =
 
 The display driver is for the USB TFT that comes as standard on the [http://www.asus.com/Desktop/Home_Theater_PC/DAV_Center_A33/#overview ASUS DAV A33 HTPC]. The display also comes with a not documented Moxi htpc, which comes in the same case as the A33.
@@ -69,4 +71,3 @@ For information on upgrading the hardware see ModificationsUpgrades.
 
 
 Some of the hardware was manafactured by iCreate Technologies Corporation. http://wikimapia.org/1787927/cn/iCreate-Technologies-Corporation-%E6%88%91%E6%83%B3%E7%A7%91%E6%8A%80%E8%82%A1%E4%BB%BD%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8 they do not appear to be in business any more.
-
