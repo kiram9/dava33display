@@ -34,7 +34,9 @@ The other option is the Ajunta IDE.
 
 In ubuntu, you will need libusb and libgd2 to build it, the easiest way is to install anjuta, libusb-dev, and build-essential, i built the project in the anjuta ide, so you might want to also build it using this, otherwise you will also need to install automake.
 
-{{{sudo apt-get install anjuta build-essential libusb-dev libgd2-xpm-dev}}} 
+{{{
+sudo apt-get install anjuta build-essential libusb-dev libgd2-xpm-dev
+}}} 
 
 
 = Running =
@@ -52,13 +54,17 @@ sudo apt-get install libgd2-noxpm
 ==Running the program==
 Generate an uncompressed RGB 24bit png image with no compression in GIMP, put your image in the same directory, then run: 
 
-{{{asusdisplay imagename.png}}} 
+{{{
+asusdisplay imagename.png
+}}} 
 
 if all goes well you should see the image displayed on the external display
 
 to daemonize it run
 
-{{{asusdisplay background.png -d}}} 
+{{{
+asusdisplay background.png -d
+}}} 
 
 
 == TinyCore / MicroCore Linux ==
