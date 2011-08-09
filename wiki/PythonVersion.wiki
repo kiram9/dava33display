@@ -3,7 +3,7 @@
 = Introduction =
 
 There is now a Pure Python version that relies on:
-  * [http://sourceforge.net/projects/pyusb/ PyUSB].
+  * [http://sourceforge.net/projects/pyusb/ PyUSB] - tested with svn rev90
   * [http://www.pythonware.com/products/pil/ PIL] - Ubuntu includes this as part of the regular installation
 
 It has been developed against PyUSB 1.0, so older versions of PyUSB (for example the Ubuntu 10.10 package python-usb is too old). Because of the new PyUSB library, support for different USB libraries is available.
@@ -35,7 +35,10 @@ Install drivers for both before using asusdisplay. In theory the driver is avail
   * Improved time (date) support
   * Other information support (think [http://conky.sourceforge.net/ Conky] / [https://launchpad.net/~m-buck/+archive/gtk-desktop-info gtk-desktop-info] (gtk-desktop-info is written in Python but uses html output))
   * RFB Protocol support (think VNC)
-  * MythTV LCD support
+      * http://en.wikipedia.org/wiki/RFB_protocol
+      * http://tigervnc.sourceforge.net/cgi-bin/rfbproto
+      * There are a few python libraries for this (client and server), server would be useful for debugging, client for displaying a remote RFB framebuffer
+  * MythTV LCD support, mythlcdserver
   * Windows MCE (Media Center Edition) LCD support - "Recording" notices, Show titles, etc.
   * URL support (i.e. load images from a website)
   * Random image support
