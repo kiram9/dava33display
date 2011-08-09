@@ -76,9 +76,12 @@ except ImportError:
         raise  # Potential to remove dependency on PIL
 
 
-DEBUG = False
+DEBUG_USBIO = False  # If set, fake usb IO
+DEBUG_DISPLAY = False  # If set, fake screen object
+#DEBUG_DISPLAY = True
+#DEBUG_USBIO = True
 
-if DEBUG:
+if DEBUG_USBIO:
     """Horrible mock objects that do NOT emulate usb lib well at all...
     ....but it works well enough for this on machines without the correct
     hardware.
@@ -142,8 +145,11 @@ for font_filename, font_size in [
     except IOError:
         pass
 # FIXME set clock color/colour, this really should be a parameter/config setting
+# white matches what c version of asusdisplay
 #clock_color = (255, 0, 0)
-clock_color = (255, 255, 255)  # white matches what c version of asusdisplay
+#clock_color = (255, 255, 255)
+clock_color = 255  # NOTE TinyCore 3.7.1, Python 2.6.5 and pil-2.6 screws up image colors when tetx "fill" is specified as a tuple, this works around this problem
+
 
 def simpleimage_clock(im):
     """Apply timestamp to image.
@@ -226,8 +232,6 @@ def image2raw(im):
 def process_image(im, include_clock=True, temp_cpu=False, temp_mb=False):
     im = simpleimage_resize(im)
     
-    # FIXME for some reason specifying text color screws up image colors :-(
-    # Seen with TinyCore Py 2.6 and pil - not sure if this is PIL or my code
     if temp_cpu or temp_mb or include_clock:
         """this could be avoided if font was printed with a black background
         (would also help with colors, e.g. white text on white image,
@@ -242,7 +246,14 @@ def process_image(im, include_clock=True, temp_cpu=False, temp_mb=False):
     return rawimage
 
 
-def raw2png(raw_filename, image_filename):
+def raw2png(rawdata):
+    """Diagnostic return PIL image from raw image
+    """
+    im = Image.fromstring('RGB', (320, 240), rawdata)
+    x = im.getdata()
+    return im
+
+def rawfile2png(raw_filename, image_filename):
     """Diagnostic to dump a viewable (PNG) of raw image
     """
     print 'reading', raw_filename
@@ -250,8 +261,7 @@ def raw2png(raw_filename, image_filename):
     binstr = f.read()
     f.close()
     
-    im = Image.fromstring('RGB', (320, 240), binstr)
-    x = im.getdata()
+    im = raw2png(binstr)
     im.save(image_filename)
 
     print 'wrote', image_filename
@@ -267,7 +277,30 @@ ImgHeader = [0x02, 0x00, 0x20, 0x00, 0x20, 0x84, 0x03,
 ImgHeader = ''.join(map(chr, ImgHeader))  # convert to "string" (byte buffer)
 
 
-class DavDisplay(object):
+class DavDisplayModel(object):
+    def displayinit(self):
+        pass
+    
+    def close(self):
+        pass
+    
+    def sendimage(self, rawimage):
+        pass
+
+
+class DavDisplayDebug(DavDisplayModel):
+    def __init__(self):
+        self._image_count = 0
+    
+    def sendimage(self, rawimage):
+        self._image_count += 1
+        fname = 'fake_display%03d.png' % self._image_count
+        im = raw2png(rawimage)
+        im.save(fname)
+        print 'wrote', fname
+
+
+class DavDisplay(DavDisplayModel):
     def __init__(self):
         """
         NOTE this really should be a Highlander object, There Can Be Only One!
@@ -494,9 +527,13 @@ def main(argv=None):
         if not os.path.exists(temp_mb):
             temp_mb = None
             print 'warning: Motherboard temp file missing, install and configure lm-sensors'
+        #temp_cpu, temp_mb = None, None  # Disable temp sensors
         rawimage = process_image(im, include_clock=include_clock, temp_cpu=temp_cpu, temp_mb=temp_mb)
 
-    display = DavDisplay()
+    if DEBUG_DISPLAY:
+        display = DavDisplayDebug()
+    else:
+        display = DavDisplay()
     display.displayinit()
     if do_random:
         while 1:
