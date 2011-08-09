@@ -16,7 +16,7 @@ It works on both 32 and 64 bit Linux. It has been tested under Windows 7 (32 bit
 
 Like the C version, some Linux distributions (like Ubuntu) require root access to access the USB port unless a udev rule is added.
 
-Also note that for temperature sensors to be displayed, lm-sensors should be installed and configured. See SoftwareAndDrivers for information on sensors,
+Also note that for temperature sensors to be displayed, lm-sensors should be installed and configured. See SoftwareAndDrivers for information on sensors.
 
 
 = Windows Notes =
