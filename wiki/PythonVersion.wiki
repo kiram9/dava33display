@@ -16,6 +16,21 @@ It works on both 32 and 64 bit Linux. It has been tested under Windows 7 (32 bit
 
 = Linux Notes =
 
+== Linux Install Notes ==
+
+
+  # check out code
+    {{{svn checkout http://dava33display.googlecode.com/svn/trunk/python dava33display-python  }}}
+  # checkout PyUSB from svn 
+    {{{ svn checkout https://pyusb.svn.sourceforge.net/svnroot/pyusb/trunk pyusb}}}
+  # then install PyUSB, one option is to siply copy the usb directory into the dava33display directory
+
+Running:
+{{{
+cd dava33display-python
+python asusdisplay some_image.png
+}}}
+
 Like the C version, some Linux distributions (like Ubuntu) require root access to access the USB port unless a udev rule is added.
 
 Also note that for temperature sensors to be displayed, lm-sensors should be installed and configured. See SoftwareAndDrivers for information on sensors.
