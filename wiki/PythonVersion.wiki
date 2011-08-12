@@ -29,6 +29,9 @@ Running:
 {{{
 cd dava33display-python
 python asusdisplay some_image.png
+
+# run for ever
+python asusdisplay some_image.png--daemon_mode
 }}}
 
 Like the C version, some Linux distributions (like Ubuntu) require root access to access the USB port unless a udev rule is added.
