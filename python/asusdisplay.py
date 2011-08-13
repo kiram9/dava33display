@@ -78,8 +78,16 @@ except ImportError:
 
 DEBUG_USBIO = False  # If set, fake usb IO
 DEBUG_DISPLAY = False  # If set, fake screen object
-#DEBUG_DISPLAY = True
-#DEBUG_USBIO = True
+#DEBUG_DISPLAY = 'file'
+#DEBUG_DISPLAY = 'tk'
+
+
+if DEBUG_DISPLAY:
+    DEBUG_USBIO = True
+    if DEBUG_DISPLAY == 'tk':
+        import Tkinter
+        import Image, ImageTk
+
 
 if DEBUG_USBIO:
     """Horrible mock objects that do NOT emulate usb lib well at all...
@@ -135,6 +143,7 @@ for font_filename, font_size in [
                                 #('orbitron-medium.ttf', 60),
                                 ('FreeSansBold.ttf', 72),
                                 ('/usr/share/fonts/truetype/freefont/FreeSansBold.ttf', 72),
+                                ('DejaVuSans-Bold.ttf', 65),  # related to FreeSansBold
                                 ('/usr/share/fonts/luxisr.ttf', 72),  # this leaves some spacce on RHS
                                 ]:
     try:
@@ -290,7 +299,7 @@ class DavDisplayModel(object):
         pass
 
 
-class DavDisplayDebug(DavDisplayModel):
+class DavDisplayDebugFile(DavDisplayModel):
     def __init__(self):
         self._image_count = 0
     
@@ -300,6 +309,29 @@ class DavDisplayDebug(DavDisplayModel):
         im = raw2png(rawimage)
         im.save(fname)
         print 'wrote', fname
+
+
+class DavDisplayDebugTk(DavDisplayModel):
+    def __init__(self):
+        self._image_count = 0
+        import Tkinter
+        import Image, ImageTk
+        width, height = MAX_IMAGE_SIZE
+        # create the canvas, size in pixels
+        self._canvas = Tkinter.Canvas(width=width, height=height, bg='yellow')
+
+        # pack the canvas into a frame/form
+        self._canvas.pack(expand = Tkinter.YES, fill = Tkinter.BOTH)
+    
+    def sendimage(self, rawimage):
+        self._image_count += 1
+        print 'self._image_count', self._image_count
+        im = raw2png(rawimage)
+        tk_im = ImageTk.PhotoImage(im)
+        self._canvas.create_image(0, 0, image=tk_im, anchor=Tkinter.NW)
+        self._canvas.update()
+    
+    ## FIXME implement clean close
 
 
 class DavDisplay(DavDisplayModel):
@@ -534,7 +566,12 @@ def main(argv=None):
         rawimage = process_image(im, include_clock=include_clock, temp_cpu=temp_cpu, temp_mb=temp_mb)
 
     if DEBUG_DISPLAY:
-        display = DavDisplayDebug()
+        if DEBUG_DISPLAY == 'file':
+            display = DavDisplayDebugFile()
+        elif DEBUG_DISPLAY == 'tk':
+            display = DavDisplayDebugTk()
+        else:
+            raise NotImplemented()
     else:
         display = DavDisplay()
     display.displayinit()
