@@ -21,7 +21,7 @@ Some distros may have a minor mismatch in sound settings; audio output only supp
 
 Temperature sensors
 
-Out of the box the ACPI temperature sensor *ALWAYS* returns 40 C. A number of BIOS have similar problems. However [http://www.lm-sensors.org/ lm-sensors] seems to work. Notes/extracts below:
+Out of the box the ACPI temperature sensor *ALWAYS* returns 40 C. A number of BIOS have similar problems. However [http://www.lm-sensors.org/ lm-sensors] works. Notes/extracts below:
 
 {{{
 $ sudo sensors-detect 
@@ -82,6 +82,11 @@ The HD Tuners show up.
 The tuner cards do work with NTSC (available in the US over cable),
 I've not been able to get clear QAM to work.
 ATSC (over the air seems to work - using the "secondary" port)
+
+Temperature sensors
+
+Like Linux Out of the box the ACPI temperature sensor *ALWAYS* returns 40 C (i.e. using WMI MSAcpi_ThermalZoneTemperature, CurrentTemperature always returns 40C). A number of BIOS have similar problems. 
+
 
 == Windows Vista ==
 
