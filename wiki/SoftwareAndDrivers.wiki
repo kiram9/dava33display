@@ -62,6 +62,9 @@ CPU Temperature:   +24.0 C  (high = +90.0 C, crit = +125.0 C)
 MB Temperature:    +37.0 C  (high = +30.0 C, crit = +90.0 C)  
 }}}
 
+NOTE the AMD CPU temperature is -49C! The real CPU is in the atk0110-acpi-0 section.
+
+
 == Windows 7 ==
 
 Out of the box every thing works.
@@ -86,6 +89,36 @@ ATSC (over the air seems to work - using the "secondary" port)
 Temperature sensors
 
 Like Linux Out of the box the ACPI temperature sensor *ALWAYS* returns 40 C (i.e. using WMI MSAcpi_ThermalZoneTemperature, CurrentTemperature always returns 40C). A number of BIOS have similar problems. 
+
+
+
+[http://openhardwaremonitor.org/ Open Hardware Monitor 0.3.2 Beta] also on [http://code.google.com/p/open-hardware-monitor/ Google Code] (like lm-sensors) reports -49C for the CPU temperature but M2NPV2-DHS / ITE IT8716F reports CPU and Motherboard temperatures. There is also a third temperature (which does change), not sure what that is for.
+
+{{{
+Sensors
+
+|
++- M2NPV2-DHS (/mainboard)
+|  |
+|  +- ITE IT8716F (/lpc/it8716f)
+|  |  +- CPU VCore      :    1.232    1.232    1.232 (/lpc/it8716f/voltage/0)
+|  |  +- Voltage #2     :    3.264    3.264    3.264 (/lpc/it8716f/voltage/1)
+|  |  +- Voltage #4     :    2.944    2.928    2.944 (/lpc/it8716f/voltage/3)
+|  |  +- Voltage #5     :    3.056    3.056    3.056 (/lpc/it8716f/voltage/4)
+|  |  +- Voltage #8     :     2.96     2.96     2.96 (/lpc/it8716f/voltage/7)
+|  |  +- VBat           :    3.152    3.152    3.152 (/lpc/it8716f/voltage/8)
+|  |  +- CPU            :       23       22       25 (/lpc/it8716f/temperature/0)
+|  |  +- Motherboard    :       25       25       25 (/lpc/it8716f/temperature/1)
+|  |  +- Temperature #3 :       29       27       29 (/lpc/it8716f/temperature/2)
+|  |  +- Fan #1         :   1110.2  1108.37  1112.03 (/lpc/it8716f/fan/0)
+|
++- AMD Athlon 64 Processor 3800+ (/amdcpu/0)
+|  +- Bus Speed      :  200.477  200.477  200.477 (/amdcpu/0/clock/0)
+|  +- CPU Core       :  2405.72  2405.72  2405.72 (/amdcpu/0/clock/1)
+|  +- Core #1        :      -49      -49      -49 (/amdcpu/0/temperature/0)
+|  +- CPU Core       :  1.53783  1.53783      100 (/amdcpu/0/load/1)
+}}}
+
 
 
 == Windows Vista ==
