@@ -19,7 +19,7 @@ Sound over HDMI requires enabling digital channel in the Mixer.
 
 Some distros may have a minor mismatch in sound settings; audio output only supports sample rate of 48khz - and pulse defaults to 44.1 so you have to force it using "default-sample-rate = 48000" in /etc/pulse/daemon.conf 
 
-=== Temperature sensors ===
+=== Linux Temperature sensors ===
 
 Out of the box the ACPI temperature sensor *ALWAYS* returns 40 C. A number of BIOS have similar problems. However [http://www.lm-sensors.org/ lm-sensors] works. Notes/extracts below:
 
@@ -87,7 +87,7 @@ I've not been able to get clear QAM to work.
 ATSC (over the air seems to work - using the "secondary" port)
 
 
-=== Temperature sensors ===
+=== Windows Temperature sensors ===
 
 Like Linux Out of the box the ACPI temperature sensor *ALWAYS* returns 40 C (i.e. using WMI MSAcpi_ThermalZoneTemperature, CurrentTemperature always returns 40C). A number of BIOS have similar problems. 
 
