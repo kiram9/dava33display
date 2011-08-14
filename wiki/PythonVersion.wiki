@@ -59,7 +59,7 @@ Install drivers for both before using asusdisplay. In theory the driver is avail
 
 Display of temperatures under Windows 7 is option and depends on [http://openhardwaremonitor.org/ Open Hardware Monitor 0.3.2 Beta] also available at [http://code.google.com/p/open-hardware-monitor/ Google Code], it also requires the [http://timgolden.me.uk/python/wmi/ Python WMI interface], which in turn requires [http://sourceforge.net/projects/pywin32/files/ pywin32].
 
-OHM must be running before asusdisplay is started, as asusdisplay only attempts to look for temperature sensor data at start up time. OHM requires admin permissions (if UAC is on, user is prompted for permission).
+OHM must be running before asusdisplay is started, as asusdisplay only attempts to look for temperature sensor data at start up time. OHM requires admin permissions (if UAC is on, user is prompted for permission). One way to avoid the UAC prompt, without disabling UAC, is to use a scheduled task as a workaround. See http://social.technet.microsoft.com/Forums/en/w7itprosecurity/thread/6822b712-8fc3-4253-8856-25e99f144262
 
 TODO consider looking at http://remotehrdwaremonitor.codeplex.com/
 
