@@ -68,7 +68,6 @@ except ImportError:
 try:
     # Windows only
     import wmi  # from http://timgolden.me.uk/python/wmi/index.html
-    wmi = None
 except ImportError:
     wmi = None
 
@@ -207,7 +206,6 @@ class TemperatureSensors(object):
         self.temp_mb_location = None
         
         self.is_windows = False
-        self.sensor_values = {'cpu': -1, 'mb': -1}
         
         if sys.platform.startswith('win'):
             self.is_windows = True
@@ -225,6 +223,7 @@ class TemperatureSensors(object):
             # Assume Open Hardware Monitor is up and running
             self.w = wmi.WMI(namespace='root\\OpenHardwareMonitor')
             # could perform OHM check here...
+            self.update()  # FIXME see note on cpu_sensor attribute no longer needed
         else:
             # Assume Linux
             
@@ -235,6 +234,7 @@ class TemperatureSensors(object):
                 self.temp_cpu_location = None
             else:
                 # FIXME this logic is rather roundabout
+                # FIXME no need for cpu_sensor attribute, remove
                 self.cpu_sensor = self.temp_cpu_location
             if not os.path.exists(self.temp_mb_location):
                 self.temp_mb_location = None
@@ -266,10 +266,12 @@ class TemperatureSensors(object):
         """Pick up new readings
         TODO this seems pretty heavy, it iterates ALL sensors!
         """
+        # Set current temps to None, if temp sensors disappear (e.g.OHM dies)
+        # this fails gracefully
+        self.sensor_values = {'cpu': None, 'mb': None}
+        
         # find sensors
         if self.is_windows:
-            # FIXME this doesn't handle OHM disapearing whilst running
-            # may need to re-init wmi
             self.cpu_sensor = None
             self.mb_sensor = None
 
