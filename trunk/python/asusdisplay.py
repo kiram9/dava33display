@@ -207,7 +207,7 @@ class TemperatureSensors(object):
         self.temp_mb_location = None
         
         self.is_windows = False
-        self.sensor_values = {}
+        self.sensor_values = {'cpu': -1, 'mb': -1}
         
         if sys.platform.startswith('win'):
             self.is_windows = True
@@ -231,12 +231,16 @@ class TemperatureSensors(object):
             # Just default/assume temperature device location
             self.temp_cpu_location = '/sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ATK0110:00/hwmon/hwmon1/temp1_input'
             self.temp_mb_location = '/sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ATK0110:00/hwmon/hwmon1/temp2_input'
-            if not os.path.exists(temp_cpu):
+            if not os.path.exists(self.temp_cpu_location):
                 self.temp_cpu_location = None
-            if not os.path.exists(temp_mb):
+            else:
+                # FIXME this logic is rather roundabout
+                self.cpu_sensor = self.temp_cpu_location
+            if not os.path.exists(self.temp_mb_location):
                 self.temp_mb_location = None
-        
-        self.update()
+            else:
+                # FIXME this logic is rather roundabout
+                self.mb_sensor = self.temp_mb_location
         
         if self.cpu_sensor is None:
             # FIXME use logging warning (pyusb seems to hijack so logging support needs time)
@@ -254,6 +258,9 @@ class TemperatureSensors(object):
                 print '\tinstall and configure lm-sensors'
         if self.cpu_sensor is None and self.mb_sensor is None:
             raise SensorsNotFound()
+        
+        self.update()
+    
     
     def update(self):
         """Pick up new readings
@@ -274,8 +281,10 @@ class TemperatureSensors(object):
                     self.mb_sensor = sensor
                     self.sensor_values['mb'] = self.mb_sensor.Value
         else:
-            self.sensor_values['cpu'] = read_temp(self.temp_cpu_location)
-            self.sensor_values['mb'] = read_temp(self.temp_mb_location)
+            if self.temp_cpu_location:
+                self.sensor_values['cpu'] = read_temp(self.temp_cpu_location)
+            if self.temp_mb_location:
+                self.sensor_values['mb'] = read_temp(self.temp_mb_location)
     
     # NOTE if more sensors are added, switch to a single lookup function with a name parameter,e.g. s.get('cpu')
     def temp_cpu(self):
