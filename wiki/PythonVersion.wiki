@@ -5,7 +5,8 @@
 = Introduction =
 
 There is now a Pure Python version that relies on:
-  * [http://sourceforge.net/projects/pyusb/ PyUSB] - tested with svn rev90
+  * [http://sourceforge.net/projects/pyusb/ PyUSB] - tested with svn rev90. See the [http://sourceforge.net/apps/trac/pyusb/ PyUSB wiki] more information
+      * [http://sourceforge.net/projects/pyusb/ PyUSB] requires [http://www.libusb.org/ libusb]
   * [http://www.pythonware.com/products/pil/ PIL] - Ubuntu includes this as part of the regular installation
 
 It has been developed against PyUSB 1.0, so older versions of PyUSB (for example the Ubuntu 10.10 package python-usb is too old). Because of the new PyUSB library, support for different USB libraries is available.
@@ -41,7 +42,7 @@ Also note that for temperature sensors to be displayed, lm-sensors should be ins
 
 = Windows Notes =
 
-libusb-0.1, aka [http://sourceforge.net/apps/trac/libusb-win32/wiki libusb-win32] has been tested with Windows 7 (32 bit), other Windows platforms should work fine too. Download from https://sourceforge.net/projects/libusb-win32/files/libusb-win32-releases/ (version 1.2.4.0 has been tested, 1.2.5.0 should work better due to improved reset support). 
+[http://www.libusb.org/wiki/windows_backend Windows libusb-0.1], aka [http://sourceforge.net/apps/trac/libusb-win32/wiki libusb-win32] has been tested with Windows 7 (32 bit), other Windows platforms should work fine too. Download from https://sourceforge.net/projects/libusb-win32/files/libusb-win32-releases/ (version 1.2.4.0 has been tested, 1.2.5.0 should work better due to improved reset support). 
 
 [http://www.libusb.org/wiki/libusb-win32 libusb under Windows] is a slightly different beast compared with Linux. Under Linux the libusb libaray and just be opened and used to access USB devices on the system (with root/sudo permissions). Under Windows, the libusb libraries need to be installed as drivers for the device in question. inf-wizard shipped in the bin directory of libusb performs the task of listing the devices and then creating (and installing) the driver.
 
