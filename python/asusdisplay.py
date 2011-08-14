@@ -66,6 +66,13 @@ except ImportError:
     import StringIO
 
 try:
+    # Windows only
+    import wmi  # from http://timgolden.me.uk/python/wmi/index.html
+    wmi = None
+except ImportError:
+    wmi = None
+
+try:
     from PIL import Image    # http://www.pythonware.com/products/pil/
     from PIL import ImageFont, ImageDraw, ImageOps
 except ImportError:
@@ -87,6 +94,13 @@ if DEBUG_DISPLAY:
     if DEBUG_DISPLAY == 'tk':
         import Tkinter
         import Image, ImageTk
+
+
+class AsusDisplayException(Exception):
+    '''Base Asus Display exception'''
+
+class SensorsNotFound(AsusDisplayException):
+    '''No temperature sensors'''
 
 
 if DEBUG_USBIO:
@@ -181,22 +195,117 @@ def read_temp(filename):
     temp_c = int(temp) / 1000  # my machine only does whole numbers
     return temp_c
 
-def simpleimage_temperator(im, temp_cpu=False, temp_mb=False):
-    """Apply temperator to image.
-    This is NOT (yet?) the same format as c version of asusdisplay
+class TemperatureSensors(object):
+    """Handles temperature information
+    raise SensorsNotFound if no sensors
+    """
+    def __init__(self):
+        self.cpu_sensor = None
+        self.mb_sensor = None
+        
+        self.temp_cpu_location = None
+        self.temp_mb_location = None
+        
+        self.is_windows = False
+        self.sensor_values = {}
+        
+        if sys.platform.startswith('win'):
+            self.is_windows = True
+        
+        if self.is_windows:
+            # Windows
+            if wmi is None:
+                print 'warning: wmi is missing, no temperature support'
+                raise SensorsNotFound()
+            
+            ## Names of sensors (also happens to work on ASUS M2NPV2-DHS motherboards too
+            self.temp_cpu_location = '/lpc/it8716f/temperature/0'
+            self.temp_mb_location = '/lpc/it8716f/temperature/1'
+            
+            # Assume Open Hardware Monitor is up and running
+            self.w = wmi.WMI(namespace='root\\OpenHardwareMonitor')
+            # could perform OHM check here...
+        else:
+            # Assume Linux
+            
+            # Just default/assume temperature device location
+            self.temp_cpu_location = '/sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ATK0110:00/hwmon/hwmon1/temp1_input'
+            self.temp_mb_location = '/sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ATK0110:00/hwmon/hwmon1/temp2_input'
+            if not os.path.exists(temp_cpu):
+                self.temp_cpu_location = None
+            if not os.path.exists(temp_mb):
+                self.temp_mb_location = None
+        
+        self.update()
+        
+        if self.cpu_sensor is None:
+            # FIXME use logging warning (pyusb seems to hijack so logging support needs time)
+            print 'warning: CPU temp file missing'
+            if self.is_windows:
+                # TODO check process list?
+                print '\tinstall and start wmi / Open Hardware Monitor'
+            else:
+                print '\tinstall and configure lm-sensors'
+        if self.mb_sensor is None:
+            print 'warning: Motherboard temp file missing'
+            if self.is_windows:
+                print '\tinstall and start wmi / Open Hardware Monitor'
+            else:
+                print '\tinstall and configure lm-sensors'
+        if self.cpu_sensor is None and self.mb_sensor is None:
+            raise SensorsNotFound()
+    
+    def update(self):
+        """Pick up new readings
+        TODO this seems pretty heavy, it iterates ALL sensors!
+        """
+        # find sensors
+        if self.is_windows:
+            # FIXME this doesn't handle OHM disapearing whilst running
+            # may need to re-init wmi
+            self.cpu_sensor = None
+            self.mb_sensor = None
+
+            for sensor in self.w.Sensor():
+                if sensor.Identifier == self.temp_cpu_location:
+                    self.cpu_sensor = sensor
+                    self.sensor_values['cpu'] = self.cpu_sensor.Value
+                elif sensor.Identifier == self.temp_mb_location:
+                    self.mb_sensor = sensor
+                    self.sensor_values['mb'] = self.mb_sensor.Value
+        else:
+            self.sensor_values['cpu'] = read_temp(self.temp_cpu_location)
+            self.sensor_values['mb'] = read_temp(self.temp_mb_location)
+    
+    # NOTE if more sensors are added, switch to a single lookup function with a name parameter,e.g. s.get('cpu')
+    def temp_cpu(self):
+        # TODO make this a property.
+        return self.sensor_values['cpu']
+
+    def temp_mb(self):
+        # TODO make this a property.
+        return self.sensor_values['mb']
+
+def simpleimage_temperature(im, sensors=None):
+    """Apply temperature to image.
+    This is NOT (yet?) the same format as c version of asusdisplay.
+    Image format is a PIL image
     NOTE modifies image in place
     """
     d = ImageDraw.Draw(im)
     # FIXME need better method of calculating position
     start_pos = 100  # getsize call?
     off_set = 40  # getsize call?
+    temp_cpu = sensors.temp_cpu()
     if temp_cpu:
         degree_sign = u'\u00b0'  # or empty string...
-        my_text = 'CPU: %02d%sC' % (read_temp(temp_cpu), degree_sign)  # optionally add degree sign? Required Unicode font (or at least non-ASCII, e.g. latin1 font is fine)
+        my_text = 'CPU: %02d%sC' % (temp_cpu, degree_sign)  # optionally add degree sign? Required Unicode font (or at least non-ASCII, e.g. latin1 font is fine)
         d.text((0, start_pos), my_text, font=temp_font, fill=clock_color)
+    
+    temp_mb  = sensors.temp_mb()
     if temp_mb:
         #my_text = 'Motherboard %r C' % read_temp(temp_mb)
-        my_text = 'MB: %02d%sC' % (read_temp(temp_mb), degree_sign)
+        my_text = 'MB: %02d%sC' % (temp_mb, degree_sign)
         d.text((0, start_pos+ off_set), my_text, font=temp_font, fill=clock_color)
     
     return im
@@ -234,16 +343,16 @@ def image2raw(im):
     im = simpleimage_resize(im)  # do not assume image is correct size
     
     """ convert to RGB
-    - TODO add check around this, image may alreayd be RGB"""
+    - TODO add check around this, image may already be RGB"""
     im = im.convert('RGB')
     x = im.getdata()
     newbuff = ''.join([''.join(map(chr, rgb_tuple)) for rgb_tuple in x])
     return newbuff
 
-def process_image(im, include_clock=True, temp_cpu=False, temp_mb=False):
+def process_image(im, include_clock=True, sensors=None):
     im = simpleimage_resize(im)
     
-    if temp_cpu or temp_mb or include_clock:
+    if sensors or include_clock:
         """this could be avoided if font was printed with a black background
         (would also help with colors, e.g. white text on white image,
         if black bar pasted first it would be readable)"""
@@ -251,8 +360,9 @@ def process_image(im, include_clock=True, temp_cpu=False, temp_mb=False):
     
     if include_clock:
         im = simpleimage_clock(im)
-    if temp_cpu or temp_mb:
-        im = simpleimage_temperator(im, temp_cpu=temp_cpu, temp_mb=temp_mb)
+    if sensors:
+        sensors.update()
+        im = simpleimage_temperature(im, sensors=sensors)
     rawimage = image2raw(im)
     return rawimage
 
@@ -535,6 +645,11 @@ def main(argv=None):
     if '--daemon_mode' in argv:
         daemon_mode = True
     
+    try:
+        sensors = TemperatureSensors()
+    except SensorsNotFound, info:
+        sensors = None
+    
     if do_random:
         # DEBUG mode, useful for soak testing to make sure LOTS of updates work
         print 'getting random images....'
@@ -552,19 +667,9 @@ def main(argv=None):
         print 'reading', image_filename
         im = Image.open(image_filename)
         im = simpleimage_resize(im)
-        # Just default/assume temperator device location
-        temp_cpu = '/sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ATK0110:00/hwmon/hwmon1/temp1_input'
-        temp_mb = '/sys/devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A08:00/ATK0110:00/hwmon/hwmon1/temp2_input'
-        if not os.path.exists(temp_cpu):
-            temp_cpu = None
-            print 'warning: CPU temp file missing, install and configure lm-sensors'
-        if not os.path.exists(temp_mb):
-            temp_mb = None
-            print 'warning: Motherboard temp file missing, install and configure lm-sensors'
-        #temp_cpu, temp_mb = None, None  # Disable temp sensors
-        #temp_cpu, temp_mb = 28, 39  # Debug enable temp sensors
-        rawimage = process_image(im, include_clock=include_clock, temp_cpu=temp_cpu, temp_mb=temp_mb)
+        rawimage = process_image(im, include_clock=include_clock, sensors=sensors)
 
+    ## TODO move this earlier?
     if DEBUG_DISPLAY:
         if DEBUG_DISPLAY == 'file':
             display = DavDisplayDebugFile()
@@ -575,6 +680,7 @@ def main(argv=None):
     else:
         display = DavDisplay()
     display.displayinit()
+    
     if do_random:
         while 1:
             for rawimage in image_list:
@@ -588,7 +694,7 @@ def main(argv=None):
             daemon mode takes 12-17% of CPU time (according to top)
             """
             time.sleep(1)  # sleep 1 second - FIXME this simple timer approach needs improving
-            rawimage = process_image(im, include_clock=include_clock, temp_cpu=temp_cpu, temp_mb=temp_mb)
+            rawimage = process_image(im, include_clock=include_clock, sensors=sensors)
             display.sendimage(rawimage)
                 
     display.close()
