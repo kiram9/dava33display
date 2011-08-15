@@ -72,7 +72,7 @@ except ImportError:
     wmi = None
 
 try:
-    from PIL import Image    # http://www.pythonware.com/products/pil/
+    from PIL import Image  # http://www.pythonware.com/products/pil/
     from PIL import ImageFont, ImageDraw, ImageOps
 except ImportError:
     try:
@@ -92,7 +92,11 @@ if DEBUG_DISPLAY:
     DEBUG_USBIO = True
     if DEBUG_DISPLAY == 'tk':
         import Tkinter
-        import Image, ImageTk
+    try:
+        from PIL import ImageTk  # http://www.pythonware.com/products/pil/
+    except ImportError:
+        # Try old style import
+        import ImageTk
 
 
 class AsusDisplayException(Exception):
@@ -703,6 +707,7 @@ def main(argv=None):
             # FIXME add interupt handler than would unset daemon_mode
             """NOTE with "standard" CPU AMD Athlon(tm) 64 Processor 3800+
             daemon mode takes 12-17% of CPU time (according to top)
+            Windows 7 task manager shows about 18-20%
             """
             time.sleep(1)  # sleep 1 second - FIXME this simple timer approach needs improving
             rawimage = process_image(im, include_clock=include_clock, sensors=sensors)
