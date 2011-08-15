@@ -59,6 +59,7 @@ import string
 import re
 import random
 import urllib2
+import math
 import time
 try:
     import cStringIO as StringIO
@@ -176,12 +177,16 @@ for font_filename, font_size in [
 #clock_color = (255, 255, 255)
 clock_color = 255  # NOTE TinyCore 3.7.1, Python 2.6.5 and pil-2.6 screws up image colors when tetx "fill" is specified as a tuple, this works around this problem
 
-def simpleimage_clock(im):
+def simpleimage_clock(im, include_clock='include_secs'):
     """Apply timestamp to image.
     This is NOT (yet?) the same format as c version of asusdisplay
     NOTE modifies image in place
+    include_clock if set to 'no_secs' does not include seconds in time display
     """
-    my_text = time.strftime('%H:%M:%S')
+    if include_clock == 'no_secs':
+        my_text = time.strftime('%H:%M')
+    else:
+        my_text = time.strftime('%H:%M:%S')
     d = ImageDraw.Draw(im)
     d.text((0, 0), my_text, font=clock_font, fill=clock_color)
     
@@ -374,7 +379,7 @@ def process_image(im, include_clock=True, sensors=None):
         im = im.copy()
     
     if include_clock:
-        im = simpleimage_clock(im)
+        im = simpleimage_clock(im, include_clock=include_clock)
     if sensors:
         sensors.update()
         im = simpleimage_temperature(im, sensors=sensors)
@@ -649,16 +654,25 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     
+    # Future option, only update display every minute (and do not display secs)
+    update_display_period = 1  # number of seconds to wait before updating display
+    floor = math.floor  # minor optimization
+
     # Super horrible command line checking
     do_random = False
     daemon_mode = False
     include_clock = True
     if '--no_clock' in argv:
         include_clock=False
+    if '--no_secs' in argv:
+        update_display_period = 60 / 3  # cpu temp to be monitored 3x a minute
+        include_clock = 'no_secs'
+        #import pdb ; pdb.set_trace()
     if '--random' in argv:
         do_random = True
     if '--daemon_mode' in argv:
         daemon_mode = True
+    
     
     try:
         sensors = TemperatureSensors()
@@ -696,6 +710,7 @@ def main(argv=None):
         display = DavDisplay()
     display.displayinit()
     
+    
     if do_random:
         while 1:
             for rawimage in image_list:
@@ -706,13 +721,41 @@ def main(argv=None):
         while daemon_mode:
             # FIXME add interupt handler than would unset daemon_mode
             """NOTE with "standard" CPU AMD Athlon(tm) 64 Processor 3800+
-            daemon mode takes 12-17% of CPU time (according to top)
-            Windows 7 task manager shows about 18-20%
-            """
-            time.sleep(1)  # sleep 1 second - FIXME this simple timer approach needs improving
-            rawimage = process_image(im, include_clock=include_clock, sensors=sensors)
-            display.sendimage(rawimage)
+            
+            Old occasionally jumped 2 secs code performance figures:
+                daemon mode takes 12-17% of CPU time (according to top in TinyCore)
+                Windows 7 task manager shows about 18-20%
                 
+                process_image(clock+2*temps) takes 0.21 secs on the same hardware! TinyCore Py2.6
+                process_image(clock+2*temps) + sendimage() takes 0.5 secs on the same hardware! TinyCore Py2.6
+            
+            With more accurate timing code (datetime), Linux (TinyCore) top shows CPU usage at 22%
+            With more accurate timing code (time), Linux (TinyCore) top shows CPU usage at 21%
+            
+            '--no_secs' option reduces CPU time to 0-4% at the expense of less
+            updates of cpu/mb temperature monitoring and no seconds in the
+            time display
+            
+            Hopefully some scope for improvement as there are no optimizations in place at the moment.
+            """
+            
+            # time module more accurate timer code
+            start_time = time.time()
+            #future_time = int(start_time) + update_display_period  # int conversion and float math
+            future_time = floor(start_time) + update_display_period  # pure float math
+            sleep_time = future_time - start_time
+            time.sleep(sleep_time)
+            
+            """NOTE because this sleep should awaken dead on the next whole
+            second, the time display lag will be say 0.5 secs (or however
+            long it takes to process and send the image).
+            """
+            
+            #start = time.time()
+            rawimage = process_image(im, include_clock=include_clock, sensors=sensors)
+            #print 'render took %3.5f' % (time.time() - start,)
+            display.sendimage(rawimage)
+            #print '    render + send took %3.5f' % (time.time() - start,)
     display.close()
     
     return 0
