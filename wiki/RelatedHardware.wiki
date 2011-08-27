@@ -1,0 +1,8 @@
+#summary M2NPV-VM Motherboard that is similar to the moxi unit
+
+== M2NPV-VM ==
+
+Manual http://dava33display.googlecode.com/svn/wiki/static/M2NPV-VM/e2806_m2npv-vm.pdf
+
+[http://dava33display.googlecode.com/svn/wiki/static/M2NPV-VM/specs.html Specs] (mirror of)  [http://www.asus.com/Motherboards/AMD_AM2/M2NPVMX/ M2NPV-MX]
+
