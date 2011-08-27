@@ -752,6 +752,14 @@ def main(argv=None):
             """
             
             #start = time.time()
+            
+            if sensors is None:
+                # See if sensors are online
+                try:
+                    sensors = TemperatureSensors()
+                except SensorsNotFound, info:
+                    pass
+
             rawimage = process_image(im, include_clock=include_clock, sensors=sensors)
             #print 'render took %3.5f' % (time.time() - start,)
             display.sendimage(rawimage)
