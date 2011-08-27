@@ -93,11 +93,11 @@ if DEBUG_DISPLAY:
     DEBUG_USBIO = True
     if DEBUG_DISPLAY == 'tk':
         import Tkinter
-    try:
-        from PIL import ImageTk  # http://www.pythonware.com/products/pil/
-    except ImportError:
-        # Try old style import
-        import ImageTk
+        try:
+            from PIL import ImageTk  # http://www.pythonware.com/products/pil/
+        except ImportError:
+            # Try old style import
+            import ImageTk
 
 
 class AsusDisplayException(Exception):
