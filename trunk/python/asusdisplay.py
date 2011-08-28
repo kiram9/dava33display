@@ -61,6 +61,8 @@ import random
 import urllib2
 import math
 import time
+import logging
+
 try:
     import cStringIO as StringIO
 except ImportError:
@@ -88,10 +90,21 @@ except ImportError:
 DEBUG_USBIO = False  # If set, fake usb IO
 DEBUG_DISPLAY = False  # If set, fake screen object
 #DEBUG_DISPLAY = 'file'
-#DEBUG_DISPLAY = 'tk'
+DEBUG_DISPLAY = 'tk'
+
+DEBUG_TEMPS = False
+#DEBUG_TEMPS = True
+
+#log_format = '%(asctime)s %(levelname)s %(message)s'
+log_format = '%(asctime)s %(filename)s:%(lineno)d %(levelname)s %(message)s'
+logging.basicConfig(format=log_format)
+log = logging.getLogger('asusdisplay')
+log.setLevel(logging.NOTSET)  # only logs; WARNING, ERROR, CRITICAL
+#log.setLevel(logging.DEBUG)
 
 
 if DEBUG_DISPLAY:
+    log.debug('DEBUG_DISPLAY %r', DEBUG_DISPLAY)
     DEBUG_USBIO = True
     if DEBUG_DISPLAY == 'tk':
         import Tkinter
@@ -133,14 +146,14 @@ if DEBUG_USBIO:
         
         def write(self, ep, block, interface, timeout):
             self.__count += 1
-            print self.__count, 'Fake WRITE', len(block)
+            log.debug('Fake WRITE %r', len(block))
             pass
         
         def read(self, ep, size, interface, timeout):
             self.__count += 1
             
             result = range(size)
-            print self.__count, 'Fake READ', len(result)
+            log.debug('Fake READ %r', len(result))
             return result
     
     class Fake(object):
@@ -169,7 +182,7 @@ for font_filename, font_size in [
                                 ]:
     try:
         clock_font = ImageFont.truetype(font_filename, font_size)
-        print font_filename, font_size
+        log.debug('font %r %r', font_filename, font_size)
         temp_font = ImageFont.truetype(font_filename, font_size / 2)
         break
     except IOError:
@@ -230,7 +243,7 @@ class TemperatureSensors(object):
         if self.is_windows:
             # Windows
             if wmi is None:
-                print 'warning: wmi is missing, no temperature support'
+                log.warn('warning: wmi is missing, no temperature support')
                 raise SensorsNotFound()
             
             ## Names of sensors (also happens to work on ASUS M2NPV2-DHS motherboards too
@@ -258,21 +271,24 @@ class TemperatureSensors(object):
             else:
                 # FIXME this logic is rather roundabout
                 self.mb_sensor = self.temp_mb_location
+            if DEBUG_TEMPS:
+                self.temp_cpu_location, self.temp_mb_location = 32, 45  # Fake temps for debugging
+                self.cpu_sensor, self.mb_sensor = self.temp_cpu_location, self.temp_mb_location  # Fake temps for debugging
         
         if self.cpu_sensor is None:
             # FIXME use logging warning (pyusb seems to hijack so logging support needs time)
-            print 'warning: CPU temp file missing'
+            log.warn('warning: CPU temp file missing')
             if self.is_windows:
                 # TODO check process list?
-                print '\tinstall and start wmi / Open Hardware Monitor'
+                log.warn('\tinstall and start wmi / Open Hardware Monitor')
             else:
-                print '\tinstall and configure lm-sensors'
+                log.warn('\tinstall and configure lm-sensors')
         if self.mb_sensor is None:
-            print 'warning: Motherboard temp file missing'
+            log.warn('warning: Motherboard temp file missing')
             if self.is_windows:
-                print '\tinstall and start wmi / Open Hardware Monitor'
+                log.warn('\tinstall and start wmi / Open Hardware Monitor')
             else:
-                print '\tinstall and configure lm-sensors'
+                log.warn('\tinstall and configure lm-sensors')
         if self.cpu_sensor is None and self.mb_sensor is None:
             raise SensorsNotFound()
         
@@ -343,7 +359,7 @@ def simpleimage_temperature(im, sensors=None):
 
 def simpleimage_resize(im):
     if im.size > MAX_IMAGE_SIZE:
-        print 'resizing'
+        log.debug('resizing')
         """resize - maintain aspect ratio
         NOTE PIL thumbnail method does not increase
         if new size is larger than original
@@ -355,7 +371,7 @@ def simpleimage_resize(im):
     # image is not too big, but it may be too small
     # _may_ need to add black bar(s)
     if im.size < MAX_IMAGE_SIZE:
-        print 'too small - add bar'
+        log.debug('too small - add bar')
         im = im.convert('RGB')  # convert to RGB
         bg_col = (0, 0, 0)
         background = Image.new('RGB', MAX_IMAGE_SIZE, bg_col)
@@ -411,7 +427,7 @@ def raw2png(rawdata):
 def rawfile2png(raw_filename, image_filename):
     """Diagnostic to dump a viewable (PNG) of raw image
     """
-    print 'reading', raw_filename
+    log.debug('reading %r', raw_filename)
     f = open(raw_filename, 'rb')
     binstr = f.read()
     f.close()
@@ -419,7 +435,7 @@ def rawfile2png(raw_filename, image_filename):
     im = raw2png(binstr)
     im.save(image_filename)
 
-    print 'wrote', image_filename
+    log.debug('wrote %r', image_filename)
 
 
 ASUS_VENDOR_ID = 0x1043
@@ -452,7 +468,7 @@ class DavDisplayDebugFile(DavDisplayModel):
         fname = 'fake_display%03d.png' % self._image_count
         im = raw2png(rawimage)
         im.save(fname)
-        print 'wrote', fname
+        log.debug('wrote %r', fname)
 
 
 class DavDisplayDebugTk(DavDisplayModel):
@@ -470,7 +486,7 @@ class DavDisplayDebugTk(DavDisplayModel):
     
     def sendimage(self, rawimage):
         self._image_count += 1
-        print 'self._image_count', self._image_count
+        log.debug('self._image_count %r', self._image_count)
         im = raw2png(rawimage)
         tk_im = ImageTk.PhotoImage(im)
         self._canvas.create_image(0, 0, image=tk_im, anchor=Tkinter.NW)
@@ -695,10 +711,10 @@ def main(argv=None):
     
     if do_random:
         # DEBUG mode, useful for soak testing to make sure LOTS of updates work
-        print 'getting random images....'
+        log.debug('getting random images....')
         image_list = []
         for url in gen_images_urls(search_term='maps', random_offset=False):
-            print url
+            log.debug(url)
             fobj = urllib2.urlopen(url)
             image_data = fobj.read()
             fileptr = StringIO.StringIO(image_data)  # fobj is missing seek() required by PIL
@@ -707,7 +723,7 @@ def main(argv=None):
             image_list.append(rawimage)
     else:
         image_filename = argv[1]
-        print 'reading', image_filename
+        log.debug('reading %r', image_filename)
         im = Image.open(image_filename)
         im = simpleimage_resize(im)
         rawimage = process_image(im, include_clock=include_clock, sensors=sensors)
