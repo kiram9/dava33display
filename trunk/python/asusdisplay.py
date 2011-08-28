@@ -90,7 +90,7 @@ except ImportError:
 DEBUG_USBIO = False  # If set, fake usb IO
 DEBUG_DISPLAY = False  # If set, fake screen object
 #DEBUG_DISPLAY = 'file'
-DEBUG_DISPLAY = 'tk'
+#DEBUG_DISPLAY = 'tk'
 
 DEBUG_TEMPS = False
 #DEBUG_TEMPS = True
@@ -100,7 +100,7 @@ log_format = '%(asctime)s %(filename)s:%(lineno)d %(levelname)s %(message)s'
 logging.basicConfig(format=log_format)
 log = logging.getLogger('asusdisplay')
 log.setLevel(logging.NOTSET)  # only logs; WARNING, ERROR, CRITICAL
-#log.setLevel(logging.DEBUG)
+log.setLevel(logging.DEBUG)
 
 
 if DEBUG_DISPLAY:
@@ -226,8 +226,13 @@ class TemperatureSensors(object):
     """Handles temperature information
     raise SensorsNotFound if no sensors
     """
-    def __init__(self):
+    def __init__(self, ignore_missing_sensors=False):
         """TODO add init param, raise error if missing (current behavior)/silent if missing. silent would ONLY warn once as would only need to instantiate object once
+        
+            @param ignore_missing_sensors - if true does NOT raise an error
+                    for missing sensors and will attempt to re-connect
+                    to the temp sensors.
+                    NOTE if wmi is missing error will still be raised.
         """
         self.cpu_sensor = None
         self.mb_sensor = None
@@ -289,8 +294,10 @@ class TemperatureSensors(object):
                 log.warn('\tinstall and start wmi / Open Hardware Monitor')
             else:
                 log.warn('\tinstall and configure lm-sensors')
-        if self.cpu_sensor is None and self.mb_sensor is None:
-            raise SensorsNotFound()
+        
+        if not ignore_missing_sensors:
+            if self.cpu_sensor is None and self.mb_sensor is None:
+                raise SensorsNotFound()
         
         self.update()
     
@@ -705,7 +712,7 @@ def main(argv=None):
         daemon_mode = True
     
     try:
-        sensors = TemperatureSensors()
+        sensors = TemperatureSensors(ignore_missing_sensors=True)
     except SensorsNotFound, info:
         sensors = None
     
@@ -782,13 +789,6 @@ def main(argv=None):
             
             #start = time.time()
             
-            if sensors is None:
-                # See if sensors are online
-                try:
-                    sensors = TemperatureSensors()
-                except SensorsNotFound, info:
-                    pass
-
             rawimage = process_image(im, include_clock=include_clock, sensors=sensors)
             #print 'render took %3.5f' % (time.time() - start,)
             display.sendimage(rawimage)
