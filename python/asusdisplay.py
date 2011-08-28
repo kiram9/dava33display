@@ -78,7 +78,9 @@ try:
 except ImportError:
     try:
         import Image    # http://www.pythonware.com/products/pil/
-        import ImageFont, ImageDraw, ImageOps
+        import ImageFont
+        import ImageDraw
+        import ImageOps
     except ImportError:
         raise  # Potential to remove dependency on PIL
 
@@ -102,6 +104,7 @@ if DEBUG_DISPLAY:
 
 class AsusDisplayException(Exception):
     '''Base Asus Display exception'''
+
 
 class SensorsNotFound(AsusDisplayException):
     '''No temperature sensors'''
@@ -177,6 +180,7 @@ for font_filename, font_size in [
 #clock_color = (255, 255, 255)
 clock_color = 255  # NOTE TinyCore 3.7.1, Python 2.6.5 and pil-2.6 screws up image colors when tetx "fill" is specified as a tuple, this works around this problem
 
+
 def simpleimage_clock(im, include_clock='include_secs'):
     """Apply timestamp to image.
     This is NOT (yet?) the same format as c version of asusdisplay
@@ -192,6 +196,7 @@ def simpleimage_clock(im, include_clock='include_secs'):
     
     return im
 
+
 def read_temp(filename):
     if isinstance(filename, int):
         # DEBUG
@@ -203,11 +208,14 @@ def read_temp(filename):
     temp_c = int(temp) / 1000  # my machine only does whole numbers
     return temp_c
 
+
 class TemperatureSensors(object):
     """Handles temperature information
     raise SensorsNotFound if no sensors
     """
     def __init__(self):
+        """TODO add init param, raise error if missing (current behavior)/silent if missing. silent would ONLY warn once as would only need to instantiate object once
+        """
         self.cpu_sensor = None
         self.mb_sensor = None
         
@@ -270,10 +278,8 @@ class TemperatureSensors(object):
         
         self.update()
     
-    
     def update(self):
         """Pick up new readings
-        TODO this seems pretty heavy, it iterates ALL sensors!
         """
         # Set current temps to None, if temp sensors disappear (e.g.OHM dies)
         # this fails gracefully
@@ -281,6 +287,9 @@ class TemperatureSensors(object):
         
         # find sensors
         if self.is_windows:
+            # TODO (for Windows) this seems pretty heavy, it iterates ALL sensors!
+            # however this is the way OHM / wmi is implemented (i.e. there doesn't seem to be a way around this
+            # can not retain sensor as it never updates
             self.cpu_sensor = None
             self.mb_sensor = None
 
@@ -306,6 +315,7 @@ class TemperatureSensors(object):
         # TODO make this a property.
         return self.sensor_values['mb']
 
+
 def simpleimage_temperature(im, sensors=None):
     """Apply temperature to image.
     This is NOT (yet?) the same format as c version of asusdisplay.
@@ -322,13 +332,14 @@ def simpleimage_temperature(im, sensors=None):
         my_text = 'CPU: %02d%sC' % (temp_cpu, degree_sign)  # optionally add degree sign? Required Unicode font (or at least non-ASCII, e.g. latin1 font is fine)
         d.text((0, start_pos), my_text, font=temp_font, fill=clock_color)
     
-    temp_mb  = sensors.temp_mb()
+    temp_mb = sensors.temp_mb()
     if temp_mb:
         #my_text = 'Motherboard %r C' % read_temp(temp_mb)
         my_text = 'MB: %02d%sC' % (temp_mb, degree_sign)
-        d.text((0, start_pos+ off_set), my_text, font=temp_font, fill=clock_color)
+        d.text((0, start_pos + off_set), my_text, font=temp_font, fill=clock_color)
     
     return im
+
 
 def simpleimage_resize(im):
     if im.size > MAX_IMAGE_SIZE:
@@ -354,6 +365,7 @@ def simpleimage_resize(im):
     
     return im
 
+
 def image2raw(im):
     """Convert a PIL image into raw format suitable for ASUS A33 DAV screen
     
@@ -368,6 +380,7 @@ def image2raw(im):
     x = im.getdata()
     newbuff = ''.join([''.join(map(chr, rgb_tuple)) for rgb_tuple in x])
     return newbuff
+
 
 def process_image(im, include_clock=True, sensors=None):
     im = simpleimage_resize(im)
@@ -393,6 +406,7 @@ def raw2png(rawdata):
     im = Image.fromstring('RGB', (320, 240), rawdata)
     x = im.getdata()
     return im
+
 
 def rawfile2png(raw_filename, image_filename):
     """Diagnostic to dump a viewable (PNG) of raw image
@@ -445,13 +459,14 @@ class DavDisplayDebugTk(DavDisplayModel):
     def __init__(self):
         self._image_count = 0
         import Tkinter
-        import Image, ImageTk
+        import Image
+        import ImageTk
         width, height = MAX_IMAGE_SIZE
         # create the canvas, size in pixels
         self._canvas = Tkinter.Canvas(width=width, height=height, bg='yellow')
 
         # pack the canvas into a frame/form
-        self._canvas.pack(expand = Tkinter.YES, fill = Tkinter.BOTH)
+        self._canvas.pack(expand=Tkinter.YES, fill=Tkinter.BOTH)
     
     def sendimage(self, rawimage):
         self._image_count += 1
@@ -551,7 +566,7 @@ class DavDisplay(DavDisplayModel):
         self.write(0x02, data)
 
         # packet #8 write - Second of Image data
-        data = rawimage[65504:65504+65536]
+        data = rawimage[65504:65504 + 65536]
         self.write(0x02, data)
 
         # packet #9 read
@@ -563,7 +578,7 @@ class DavDisplay(DavDisplayModel):
         self.write(0x02, data)
 
         # packet #11 write - Third of Image data
-        data = rawimage[65504+65536:65504+65536+65536]
+        data = rawimage[65504 + 65536:65504 + 65536 + 65536]
         self.write(0x02, data)
 
         # packet #12 read
@@ -575,7 +590,7 @@ class DavDisplay(DavDisplayModel):
         self.write(0x02, data)
 
         # packet #14 write - Fourth/Last of Image data
-        data = rawimage[65504+65536+65536:]
+        data = rawimage[65504 + 65536 + 65536:]
         self.write(0x02, data)
 
         # packet #15 read
@@ -627,7 +642,7 @@ def gen_images_urls(search_term=None, random_offset=True):
         search_term = ''.join(word_list)
     
     #limit_size = '&tbs=isz:ex,iszw:320,iszh:240'  # 320x240 - note only useful if getting original image
-    limit_size = "&tbs=isz:lt,islt:2mp"  #  Larger than 2MP
+    limit_size = "&tbs=isz:lt,islt:2mp"  # Larger than 2MP
     if random_offset:
         start_offset = (random.randint(0, 50) * 10)  # Randomize the start page
     else:
@@ -663,7 +678,7 @@ def main(argv=None):
     daemon_mode = False
     include_clock = True
     if '--no_clock' in argv:
-        include_clock=False
+        include_clock = False
     if '--no_secs' in argv:
         update_display_period = 60 / 3  # cpu temp to be monitored 3x a minute
         include_clock = 'no_secs'
@@ -672,7 +687,6 @@ def main(argv=None):
         do_random = True
     if '--daemon_mode' in argv:
         daemon_mode = True
-    
     
     try:
         sensors = TemperatureSensors()
@@ -709,7 +723,6 @@ def main(argv=None):
     else:
         display = DavDisplay()
     display.displayinit()
-    
     
     if do_random:
         while 1:
