@@ -118,6 +118,31 @@ def doit():
         
         return im
 
+    def simpleimage_date(im, text_color=None):
+        """Apply date to image. TODO move into clock routine
+        Image format is a PIL image
+        NOTE modifies image in place
+        """
+        d = ImageDraw.Draw(im)
+        # FIXME need better method of calculating position
+        start_pos = 90  # getsize call?
+        off_set = 40  # getsize call?
+        #now = time.localtime(100 + 24 * 60 * 60)
+        now = time.localtime()
+        my_text = time.strftime('%a', now)
+        text_color = text_color or asusdisplay.clock_color
+        d.text((220, start_pos), my_text, font=asusdisplay.temp_font, fill=text_color)
+        
+        day = now.tm_mday
+        if 4 <= day <= 20 or 24 <= day <= 30:
+            suffix = "th"
+        else:
+            suffix = ["st", "nd", "rd"][day % 10 - 1]
+        my_text = '%d%s' % (day, suffix)
+        d.text((220, start_pos + off_set), my_text, font=asusdisplay.temp_font, fill=text_color)
+        
+        return im
+
     def process_image(image_in, include_clock=True, sensors=None, free_space=None):
         """Params:
             @param image_in - PIL image to write information over the top of
@@ -132,11 +157,12 @@ def doit():
             if black bar pasted first it would be readable)"""
             image_in = image_in.copy()
         
-        if include_clock:
-            image_in = asusdisplay.simpleimage_clock(image_in, include_clock=include_clock)
+        image_in = asusdisplay.simpleimage_clock(image_in, include_clock=include_clock)
+        image_in = simpleimage_date(image_in)
         if sensors:
             image_in = asusdisplay.simpleimage_temperature(image_in, sensors=sensors)
         if free_space:
+            #free_space = 888.8 * 1024* 1024* 1024  # Debug value
             image_in = simpleimage_freespace(image_in, free_space)
         rawimage = asusdisplay.image2raw(image_in)
         return rawimage
