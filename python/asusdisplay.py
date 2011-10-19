@@ -400,8 +400,7 @@ def image2raw(im):
     """ convert to RGB
     - TODO add check around this, image may already be RGB"""
     im = im.convert('RGB')
-    x = im.getdata()
-    newbuff = ''.join([''.join(map(chr, rgb_tuple)) for rgb_tuple in x])
+    newbuff = im.tostring()
     return newbuff
 
 
