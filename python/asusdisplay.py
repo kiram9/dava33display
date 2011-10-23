@@ -62,6 +62,7 @@ import urllib2
 import math
 import time
 import logging
+import threading
 
 try:
     import cStringIO as StringIO
@@ -444,6 +445,22 @@ def rawfile2png(raw_filename, image_filename):
     log.debug('wrote %r', image_filename)
 
 
+def ignore_keyboardinterrupt(callable_object, *args, **kwargs):
+    """Run callable_object() and ignore/drop any CTRL-C presses during
+    execution. This only works under CPython, it works my spawning a Thread
+    that executes callable_object.
+    """
+    try:
+        # CPython threads ignore CTRL-C, (mis)use that to our advantage
+        mythread = threading.Thread(target=callable_object, *args, **kwargs)
+        mythread.start()
+        mythread.join()
+    except KeyboardInterrupt:
+        # This ignores any ctrl-c that occured whilst waiting for the thread to join
+        pass
+
+
+
 ASUS_VENDOR_ID = 0x1043
 ASUS_PRODUCT_ID = 0x82B2
 
@@ -509,6 +526,18 @@ class DavDisplay(DavDisplayModel):
         self.packet_count = 0
         self.dev = None
         self._platform = os.name
+        
+        # packet #4 write - Informs devices the first part of the image data is coming next
+        self.sendimage_p1 = 'USBC\xa1i\x00\x00\x00\x00\x01\x00\x00\x00\x0c\xe6\x02\x00\x01\x00\x00\x00\x03\x84 \x00\x00\x00\x00\x00\x00'
+
+        # packet #7 write
+        self.sendimage_p2 = 'USBC\xa2i\x00\x00\x00\x00\x01\x00\x00\x00\x0c\xe6\x02\x00\x01\x00\x00\x00\x03\x84 \x01\x00\x00\x00\x00\x00'
+
+        # packet #10 write
+        self.sendimage_p3 = 'USBC\xa3i\x00\x00\x00\x00\x01\x00\x00\x00\x0c\xe6\x02\x00\x01\x00\x00\x00\x03\x84 \x02\x00\x00\x00\x00\x00'
+
+        # packet #13 write
+        self.sendimage_p4 = 'USBC\xa4i\x00\x00 \x84\x00\x00\x00\x00\x0c\xe6\x02\x00\x00\x84 \x00\x03\x84 \x03\x00\x00\x00\x00\x00'
     
     def displayinit(self):
         """Similar to C version of () and displayinit()
@@ -559,13 +588,30 @@ class DavDisplay(DavDisplayModel):
             self.dev.reset()
         #del(self.dev)  #? TODO
     
-    def sendimage(self, rawimage):
+    def sendimage(self, rawimage, interruptible=False):
+        """Calls real sendimage in a safe uninterruptible (e.g. from CTRL-C) thread
+        
+        TODO TEST (under linux and Windows).
+        
+        If the display protocol of the USB LCD screen is not followed,
+        e.g. abort after write of the 2nd chunk of the image, the screen
+        no longer responds until powered off/on (i.e. an OS reboot doesn't
+        fix it).
+        
+        TODO consider a flag to this routine, ignore_ctrl_c=True allowing caller to disable.
+        """
+        if interruptible:
+            self._sendimage(rawimage)
+        else:
+            ignore_keyboardinterrupt(self._sendimage, args=[rawimage])
+    
+    def _sendimage(self, rawimage):
         """Similar to C version of sendimage()
         
         @param rawimage - the raw image to send
         """
         # packet #4 write - Informs devices the first part of the image data is coming next
-        data = 'USBC\xa1i\x00\x00\x00\x00\x01\x00\x00\x00\x0c\xe6\x02\x00\x01\x00\x00\x00\x03\x84 \x00\x00\x00\x00\x00\x00'
+        data = self.sendimage_p1
         self.write(0x02, data)
 
         """
@@ -584,7 +630,7 @@ class DavDisplay(DavDisplayModel):
         #assert len(data) == 13, '%d != 13' % (len(data), )   # under Python may see 9? (TODO CHECK newlines?)
 
         # packet #7 write
-        data = 'USBC\xa2i\x00\x00\x00\x00\x01\x00\x00\x00\x0c\xe6\x02\x00\x01\x00\x00\x00\x03\x84 \x01\x00\x00\x00\x00\x00'
+        data = self.sendimage_p2
         self.write(0x02, data)
 
         # packet #8 write - Second of Image data
@@ -596,7 +642,7 @@ class DavDisplay(DavDisplayModel):
         #assert len(data) == 13, '%d != 13' % (len(data), )   # under Python may see 9? (TODO CHECK newlines?)
 
         # packet #10 write
-        data = 'USBC\xa3i\x00\x00\x00\x00\x01\x00\x00\x00\x0c\xe6\x02\x00\x01\x00\x00\x00\x03\x84 \x02\x00\x00\x00\x00\x00'
+        data = self.sendimage_p3
         self.write(0x02, data)
 
         # packet #11 write - Third of Image data
@@ -608,7 +654,7 @@ class DavDisplay(DavDisplayModel):
         #assert len(data) == 13, '%d != 13' % (len(data), )   # under Python may see 9? (TODO CHECK newlines?)
 
         # packet #13 write
-        data = 'USBC\xa4i\x00\x00 \x84\x00\x00\x00\x00\x0c\xe6\x02\x00\x00\x84 \x00\x03\x84 \x03\x00\x00\x00\x00\x00'
+        data = self.sendimage_p4
         self.write(0x02, data)
 
         # packet #14 write - Fourth/Last of Image data
