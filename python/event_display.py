@@ -191,7 +191,18 @@ def doit():
         display.close()
         event.abort()  # shutdown event system
     
+    global max_frames_to_paint
+    max_frames_to_paint = 10
     def display_callback():
+        """
+        # debug code to only run for a few frames, allows easy profiling.
+        global max_frames_to_paint
+        max_frames_to_paint -= 1
+        if not max_frames_to_paint:
+            print 'quit'
+            event.abort()
+            return
+        """
         event.timeout(update_display_period, display_callback)  # re-register the timer immediately to ensure wake up every number_of_secs secs (and do not include render time)
         update_display()
         return None  # causes the timer to NOT be called again
