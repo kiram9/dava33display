@@ -28,7 +28,8 @@ This unit is essentially a cut down A33; missing some ports (and WiFi) and with 
   * AMD Athlon 64 3800+
   * 512Mb ram (2x 256Mb DDR2 667)
 
-Mainboard/Chipset:
+== Mainboard/Chipset ==
+
   * ASUS M2NPV2-DHS motherboard with nVidia nForce 4 chipset
   * 4x DDR2 slots in total (2 are usually used)
   * NVIDIA GPU GeForce 6510LE built in HDMI (video and audio), also Component, S-Video, and composite
@@ -44,8 +45,8 @@ Mainboard/Chipset:
   * Gigabit Ethernet (10/100/1000 network port)
 
 
+== Other ==
 
-Other:
   * 320GB 7200RPM SATA (Seagate 35.3) hard disk
   * Slim slot DVD drive
   * TFT display (usb) - what http://code.google.com/p/dava33display/ is all about. Under Windows with drivers this has the time and under Windows Media Center may list the current video name
@@ -55,6 +56,7 @@ Other:
   * Front panel buttons: Menu, Left, Right, Up, Down, OK - Unsure how to use these. Menu button controls "effects" (Normal, Jazz, Rock, etc.)
 
 == BIOS information ==
+
   * Phoenix - AwardBIOS v6.00PG
   * ASUS M2NPV2-DHS ACPI BIOS Revision 0110
   * BIOS: 06/28/2007-C51PV-MCP51-M2NPV2DH-00
