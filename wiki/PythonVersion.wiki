@@ -1,6 +1,8 @@
 #summary Python version of asusdisplay
 
-http://dava33display.googlecode.com/svn/wiki/static/pics/pyv2_display_white.png <wiki:toc max_depth="3" /> 
+<wiki:toc max_depth="3" /> 
+
+http://dava33display.googlecode.com/svn/wiki/static/pics/pyv2_display_white.png
 
 = Introduction =
 
