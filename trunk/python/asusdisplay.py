@@ -621,6 +621,12 @@ class DavDisplay(DavDisplayModel):
         image p3 65536
         """
 
+        """NOTE I experimented with not performing string/byte slices for
+        each data chunk (using a constant image for a test) and send time
+        on stock hardware is 0.281 secs whether slices are made or a
+        constant buffer.
+        99.9% of the time is spent inside the pyusb/libusb library.
+        """
         # packet #5 write - First of Image data, includes Image Header
         data = ImgHeader + rawimage[:65504]
         self.write(0x02, data)

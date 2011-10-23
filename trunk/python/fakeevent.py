@@ -88,7 +88,7 @@ def dispatch_timesleep():
 def abort():
     """# shutdown event system
     """
-    print 'fake abort hit'
+    global _timesleep_queue
     _timesleep_queue = []
 
 timeout = timeout_timesleep
