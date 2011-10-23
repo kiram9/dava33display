@@ -8,6 +8,7 @@ There is now a Pure Python version that relies on:
   * [http://sourceforge.net/projects/pyusb/ PyUSB] - tested with svn rev90. See the [http://sourceforge.net/apps/trac/pyusb/ PyUSB wiki] more information
       * [http://sourceforge.net/projects/pyusb/ PyUSB] requires [http://www.libusb.org/ libusb]
   * [http://www.pythonware.com/products/pil/ PIL] - Ubuntu includes this as part of the regular installation
+      * For Windows the [http://pypi.python.org/pypi/PIL official PIL binaries], http://www.lfd.uci.edu/~gohlke/pythonlibs/#pil, or [http://pypi.python.org/pypi/Pillow Pillow] may be used
   * [http://openhardwaremonitor.org/ Open Hardware Monitor 0.3.2 Beta] - Windows only used for temperature information (see Windows section below for more information)
 
 It has been developed against PyUSB 1.0, so older versions of PyUSB (for example the Ubuntu 10.10 package python-usb is too old). Because of the new PyUSB library, support for different USB libraries is available.
