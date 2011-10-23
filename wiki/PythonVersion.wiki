@@ -70,7 +70,7 @@ Display of temperatures under Windows 7 is option and depends on:
       * it also requires the [http://timgolden.me.uk/python/wmi/ Python WMI interface]
          * which in turn requires [http://sourceforge.net/projects/pywin32/files/ pywin32].
 
-OHM must be running when asusdisplay is running, otherwise temp is not displayed. OHM can be started after asusdisplay. OHM requires admin permissions (if UAC is on, user is prompted for permission). One way to avoid the UAC prompt, without disabling UAC, is to use a scheduled task as a workaround. See http://social.technet.microsoft.com/Forums/en/w7itprosecurity/thread/6822b712-8fc3-4253-8856-25e99f144262
+OHM must be running when asusdisplay is running, otherwise temp is not displayed. OHM can be started after asusdisplay. OHM requires admin permissions (if UAC is on, user is prompted for permission). One way to avoid the UAC prompt, without disabling UAC, is to use a scheduled task as a workaround. See http://social.technet.microsoft.com/Forums/en/w7itprosecurity/thread/6822b712-8fc3-4253-8856-25e99f144262, http://www.howtogeek.com/howto/windows-vista/create-administrator-mode-shortcuts-without-uac-prompts-in-windows-vista/
 
 TODO consider looking at http://remotehrdwaremonitor.codeplex.com/
 
