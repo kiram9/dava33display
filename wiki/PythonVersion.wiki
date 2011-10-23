@@ -77,7 +77,7 @@ TODO consider looking at http://remotehrdwaremonitor.codeplex.com/
 
 = Roadmap / Possible Futures =
 
-  * Improved time (date) support
+  * Improve performance; http://psyco.sourceforge.net/ , [http://shed-skin.blogspot.com/ Shed Skin], Cython, [[http://www.nuitka.net/blog/nuitka-a-python-compiler/ nuitka]. Right now most of the time is spent in the Python USB library
   * Other information support (think [http://conky.sourceforge.net/ Conky] / [https://launchpad.net/~m-buck/+archive/gtk-desktop-info gtk-desktop-info] (gtk-desktop-info is written in Python but uses html output))
   * RFB Protocol support (think VNC)
       * http://en.wikipedia.org/wiki/RFB_protocol
@@ -86,4 +86,4 @@ TODO consider looking at http://remotehrdwaremonitor.codeplex.com/
   * MythTV LCD support, mythlcdserver
   * Windows MCE (Media Center Edition) LCD support - "Recording" notices, Show titles, etc.
   * URL support (i.e. load images from a website)
-  * Random image support
+  * Random image support (partially implemented)
