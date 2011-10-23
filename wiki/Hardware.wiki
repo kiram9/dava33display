@@ -54,7 +54,7 @@ Other:
   * Rotary volume control (with push butto action) - Under Windows with drivers this controls Windows volume control
   * Front panel buttons: Menu, Left, Right, Up, Down, OK - Unsure how to use these. Menu button controls "effects" (Normal, Jazz, Rock, etc.)
 
-BIOS information:
+== BIOS information ==
   * Phoenix - AwardBIOS v6.00PG
   * ASUS M2NPV2-DHS ACPI BIOS Revision 0110
   * BIOS: 06/28/2007-C51PV-MCP51-M2NPV2DH-00
