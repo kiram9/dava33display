@@ -87,3 +87,5 @@ TODO consider looking at http://remotehrdwaremonitor.codeplex.com/
   * Windows MCE (Media Center Edition) LCD support - "Recording" notices, Show titles, etc.
   * URL support (i.e. load images from a website)
   * Random image support (partially implemented)
+  * Windows only, implement support for http://remotehrdwaremonitor.codeplex.com/
+  * Record temperatures for later checking, e.g. plot temperature charts over time
