@@ -13,7 +13,7 @@ The (Pure) Python version is the main release DAV A33 Display and relies on:
       * For Windows the [http://pypi.python.org/pypi/PIL official PIL binaries], http://www.lfd.uci.edu/~gohlke/pythonlibs/#pil, or [http://pypi.python.org/pypi/Pillow Pillow] may be used
   * [http://openhardwaremonitor.org/ Open Hardware Monitor 0.3.2 Beta] - Windows only used for temperature information (see Windows section below for more information)
 
-It has been developed against PyUSB 1.0, so older versions of PyUSB (for example the Ubuntu 10.10 package python-usb is too old). Because of the new PyUSB library, support for different USB libraries is available.
+It has been developed against PyUSB 1.0, so older versions of PyUSB (for example the Ubuntu 10.10 package python-usb is too old as it is part of the 0.x series). Because of the new PyUSB library, support for different USB libraries is available.
 
 It has been tested with Python 2.5 and 2.6, but any 2.x version that is 2.4 or later should work (older releases could be supported if needed).
 
