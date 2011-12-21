@@ -6,8 +6,8 @@ http://dava33display.googlecode.com/svn/wiki/static/pics/pyv2_display_white.png
 
 = Introduction =
 
-There is now a Pure Python version that relies on:
-  * [http://sourceforge.net/projects/pyusb/ PyUSB] - tested with svn rev90. See the [http://sourceforge.net/apps/trac/pyusb/ PyUSB wiki] more information
+The (Pure) Python version is the main release DAV A33 Display and relies on:
+  * [http://sourceforge.net/projects/pyusb/ PyUSB] v1.0 (NOTE version 0.x does NOT work)- tested with svn [http://pyusb.svn.sourceforge.net/viewvc/pyusb?view=revision&revision=90 rev90]. See the [http://sourceforge.net/apps/trac/pyusb/ PyUSB wiki] more information
       * [http://sourceforge.net/projects/pyusb/ PyUSB] requires [http://www.libusb.org/ libusb]
   * [http://www.pythonware.com/products/pil/ PIL] - Ubuntu includes this as part of the regular installation
       * For Windows the [http://pypi.python.org/pypi/PIL official PIL binaries], http://www.lfd.uci.edu/~gohlke/pythonlibs/#pil, or [http://pypi.python.org/pypi/Pillow Pillow] may be used
