@@ -65,7 +65,9 @@ MB Temperature:    +37.0 C  (high = +30.0 C, crit = +90.0 C)
 NOTE the AMD CPU temperature is -49C! The real CPU is in the atk0110-acpi-0 section.
 
 
-== Windows 7 ==
+== Microsoft Windows ==
+
+=== Windows 7 ===
 
 Out of the box every thing works.
   * gfx over hdmi is fine
@@ -87,7 +89,7 @@ I've not been able to get clear QAM to work.
 ATSC (over the air seems to work - using the "secondary" port)
 
 
-=== Windows Temperature sensors ===
+==== Windows Temperature sensors ====
 
 Like Linux Out of the box the ACPI temperature sensor *ALWAYS* returns 40 C (i.e. using WMI MSAcpi_ThermalZoneTemperature, CurrentTemperature always returns 40C). A number of BIOS have similar problems. 
 
@@ -120,7 +122,7 @@ Sensors
 
 
 
-== Windows Vista ==
+=== Windows Vista ===
 
 Most things work out of the box. The Windows "find driver now" works for the tuner cards (but it is just as easy to download from http://www.hauppauge.com/site/products/data_hvr1800.html). Out of the box sound only works through headphones.
 
