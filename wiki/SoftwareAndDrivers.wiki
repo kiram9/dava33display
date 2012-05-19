@@ -71,7 +71,7 @@ NOTE the AMD CPU temperature is -49C! The real CPU is in the atk0110-acpi-0 sect
 
 Out of the box every thing works.
   * gfx over hdmi is fine
-  * Sound is fine have to select the correct output device in sound mixer (and set default in Control Panel), viz. "Digital Audio (S/PDIF) High Definition Audio Device" for sound over HDMI to work. Headphone socket shows as a separate device.
+  * Sound (over hdmi) is fine have to select the correct output device in sound mixer (and set default in Control Panel), viz. "Digital Audio (S/PDIF) High Definition Audio Device" for sound over HDMI to work. Headphone socket shows as a separate device.
   * Remote control just works, an MCE remote launches MCE correctly.
 
 Only 3 devices shows as unknown in the Control panel, Device Manager:
