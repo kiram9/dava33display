@@ -17,6 +17,8 @@ http://dava33display.googlecode.com/svn/wiki/static/pics/hddmr9000_x800.jpg
 
 The 4 DDR2 memory slots are located underneath the DVD drive (bottom center of image above ). It may be possible to slide the DIMMS in from the side. I ended up unscrewing the 4 hard drive cage (bottom right) screws, removing the cage (unplugging power and data cable first) and then sliding in the DIMMS from the gap this creates.
 
+Update on RAM, I had one of my new (i.e. didn't come with the unit) DIMMs go bad, I was able to remove and replace them by angling them in form the left (if facing from front) side, where the side fan and tuner is located. Rotate the DIMM so it is flat (if pushed against the motherboard) slide in to the right, then rotate into the correct plane down into the DIMM slots.
+
 
 == PSU / Power Supply ==
 
