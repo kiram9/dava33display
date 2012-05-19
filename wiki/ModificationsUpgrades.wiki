@@ -40,7 +40,7 @@ I have replaced the power supply 3 times on an almost yearly basis. I've now pas
 
 = Peripherals =
 
-Regular keyboard/mouse can be plugged into USB ports.
+Regular keyboard/mouse can be plugged into USB ports without the need for special drivers. Logitech Unifying Receiver mice and keyboards work great (over long range). Can be paired under Windows or Linux https://bitbucket.org/clach04/logitech-unifying-receiver-tools/wiki/Home
 
 == Remote controls ==
 
@@ -51,7 +51,7 @@ The A33 appears to ship with a number of IR remote devices:
 
 need documentation and model numbers (and suitable replacements/alternatives).
 
-Under Linux LIRC works fine with the remote receiver, so any remote should be usable under Linux (e.g. an old TV remote).
+Under Linux LIRC works fine with the remote receiver, so any remote should be usable under Linux (e.g. an old TV remote). But choosing a Windows Media Center MCE remote is probably the easiest option.
 
 Under [SoftwareAndDrivers#Microsoft_Windows Windows] the ASUS A Series drivers need to be installed. If you do not have an MCE remote but have a universal remote configure the remote to emulate a Philips MCP-9350I/03. The Philips remote is like the RC1974506/00 depicted at http://www.mythtv.org/wiki/MCE_Remote. Also see this thread http://www.avsforum.com/avs-vb/showthread.php?t=1314366 where more advanced remote options are mentioned (Microsoft  MCE-1039 and for Logitech Harmony users see [http://forums.logitech.com/t5/Harmony-Remotes-Programming/Expanded-control-for-Windows-Media-Center-now-available-in-our/td-p/374844?nobounce Microsoft Windows Media Center SE]).
 
