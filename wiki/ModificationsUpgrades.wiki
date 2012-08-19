@@ -26,7 +26,7 @@ The PSU is a [http://en.wikipedia.org/wiki/MicroATX MATX] size which is smaller 
 
 clach04's power supply fan often doesn't rotate on power up (blowing on the fan causes it to start). It probably needs to be replaced at some point.
 
-kieran.levin has replaced his PSU with an MATX  diablotek power supply
+kieran.levin has replaced his PSU with an Diablotek PHD Series PHD380M 380W Micro ATX Power Supply. The fan noise is higher than the original one - but the one that came with it was underpowered and probably ran too hot causing its premature demise. It is a very nice supply.
 
 Wilde-Man has replaced his PSU.  Here are the details:
 I have replaced the power supply 3 times on an almost yearly basis. I've now past the 4th year. The first time I replaced it with the same PS. The second time I replaced it with a SilenX 400 Watt PS, then turned off my AC while on vacation and it burned up. Finally, I replaced it with a FSP300-GHS from http://UpgradeNation.com. I believe this to be the upgraded replacement for the original PS. I also have a second DAV-A33 whose PS went out in the one year time frame. It was also repaired with the afore mentioned FSP300-GHS, and is currently running for over a year. 
