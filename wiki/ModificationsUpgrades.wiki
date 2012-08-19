@@ -22,7 +22,7 @@ Update on RAM, I had one of my new (i.e. didn't come with the unit) DIMMs go bad
 
 == PSU / Power Supply ==
 
-The PSU is a [http://en.wikipedia.org/wiki/MicroATX MATX] size which is smaller than a regular ATX supply. 
+The PSU is a [http://en.wikipedia.org/wiki/MicroATX MATX] size which is smaller than a regular ATX supply. The original PSU is rated for 320W.
 
 clach04's power supply fan often doesn't rotate on power up (blowing on the fan causes it to start). It probably needs to be replaced at some point.
 
