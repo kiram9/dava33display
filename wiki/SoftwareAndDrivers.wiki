@@ -69,6 +69,8 @@ NOTE the AMD CPU temperature is -49C! The real CPU is in the atk0110-acpi-0 sect
 
 === Windows 7 ===
 
+Tested with Windows 7 x86.
+
 Out of the box every thing works.
   * gfx over hdmi is fine
   * Sound (over hdmi) is fine have to select the correct output device in sound mixer (and set default in Control Panel), viz. "Digital Audio (S/PDIF) High Definition Audio Device" for sound over HDMI to work. Headphone socket shows as a separate device.
@@ -123,6 +125,8 @@ Sensors
 
 
 === Windows Vista ===
+
+Tested with Windows Vista with Service Pack 2 (x86) "Windows Vista Home Premium".
 
 Most things work out of the box. The Windows "find driver now" works for the tuner cards (but it is just as easy to download from http://www.hauppauge.com/site/products/data_hvr1800.html). Out of the box sound only works through headphones.
 
