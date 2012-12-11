@@ -69,7 +69,8 @@ NOTE the AMD CPU temperature is -49C! The real CPU is in the atk0110-acpi-0 sect
 
 === Windows 7 ===
 
-Tested with Windows 7 x86.
+Tested with successfully with Windows 7 x86 (for example the Professional edition).
+Ramesh has reported problems with  all different editions (for example the Professional edition) of Windows 7 64 bit, it always gets stuck at the "Completing Installation" step.
 
 Out of the box every thing works.
   * gfx over hdmi is fine
