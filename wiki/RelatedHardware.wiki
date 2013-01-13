@@ -1,6 +1,13 @@
 #summary M2NPV-VM Motherboard that is similar to the moxi unit
 
+
+== A33, A31, A33L, A31L ASUS DAV Center ==
+
+Manual http://dava33display.googlecode.com/svn/wiki/static/ASUS_DAV_Center/English_Manual.pdf
+
 == M2NPV-VM ==
+
+Motherboard with similar specs.
 
 Manual http://dava33display.googlecode.com/svn/wiki/static/M2NPV-VM/e2806_m2npv-vm.pdf
 
