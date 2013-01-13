@@ -7,9 +7,8 @@ Manual http://dava33display.googlecode.com/svn/wiki/static/ASUS_DAV_Center/Engli
 
 == M2NPV-VM ==
 
-Motherboard with similar specs.
+Motherboard with similar specs to MOXI HOME CINEMA HD DMR model HDDMR9000.
 
 Manual http://dava33display.googlecode.com/svn/wiki/static/M2NPV-VM/e2806_m2npv-vm.pdf
 
 [http://dava33display.googlecode.com/svn/wiki/static/M2NPV-VM/specs.html Specs] (mirror of)  [http://www.asus.com/Motherboards/AMD_AM2/M2NPVMX/ M2NPV-MX]
-
