@@ -50,8 +50,16 @@ This unit is essentially a cut down A33; missing some ports (and WiFi) and with 
   * 320GB 7200RPM SATA (Seagate 35.3) hard disk
   * Slim slot DVD drive
   * TFT display (usb) - what http://code.google.com/p/dava33display/ is all about. Under Windows with drivers this has the time and under Windows Media Center may list the current video name
+{{{
+#lsusb under Linux shows:
+ID 1043:82b2 iCreate Technologies Corp.
+}}}
   * 2x Hauppauge 1800 PCI-Express dual tuner (HD+Analog) tuners with hardware MPEG encoder (TV ONLY inputs, i.e. no FM or RCA inputs) - NOTE some hardware ID software identifies these as Hauppauge HDPVR-1250 model 1196. One card is PCI-E 16x, the other is PCI-E 1x. NOTE there are 2 cable inputs, one marked *Primary*, the other *Secondary*. NOTE when using OTA (Over The Air) HD ATSC Antenna (for example, Radio Shack 15-1874 is an excellent un-powered indoor antenna), this *must* be in the *Secondary* port, attaching an antenna in the Primary does *not* work. Cable for NTSC works in the Primary.
   * IR port (usb)
+{{{
+#lsusb under Linux shows:
+ID 1784:0006 TopSeed Technology Corp. eHome Infrared Transceiver
+}}}
   * Rotary volume control (with push butto action) - Under Windows with drivers this controls Windows volume control
   * Front panel buttons: Menu, Left, Right, Up, Down, OK - Unsure how to use these. Menu button controls "effects" (Normal, Jazz, Rock, etc.)
 
